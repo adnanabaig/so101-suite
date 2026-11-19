@@ -52,7 +52,7 @@ Hardware deployment examples require rig-specific configuration and validation.
 | Depth / camera alignment | Isolated D435i RGB-D capture exercised at 30 fps; live depth recording, D405 depth delivery and camera-to-robot alignment remain unfinished |
 | Preflight | October 27 report resolves the old shoulder/rest-pose blocker; all-pose clearance and physical stop qualification remain open |
 | Foreground session | Terminal launcher supports Ctrl+C Halt/rest shutdown and second Ctrl+C E-stop escalation; software signal tests pass, physical validation pending |
-| Validation | See the dated [development preview checks](docs/validation/development-preview.md); full software and hardware qualification is not claimed |
+| Validation | Frontend checks and mock HTTP smoke pass; backend run: 3,753 passed, 51 failed, 9 skipped. See [development preview checks](docs/validation/development-preview.md); the full release gate has not passed |
 | Learning results | No real-world trained-policy performance or research result claimed |
 
 Bench observations above were collected October 23–November 1, 2026; they are
