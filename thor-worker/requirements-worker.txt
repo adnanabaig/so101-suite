@@ -1,0 +1,9 @@
+# Qualification input only. The checked-in container does not install this file
+# and cannot be marked locked from it; a real Thor wheelhouse needs its own
+# reviewed, canonical artifact manifest.
+# PyTorch/CUDA/cuDNN/TensorRT must come from the digest-pinned NVIDIA image.
+# Deliberately no so101 robot or realsense extra, pyrealsense2, Feetech SDK, or
+# serial package. Resolve with scripts/dependency_probe.py before changing the
+# measured image.
+lerobot[diffusion,pi,smolvla,training]==0.6.1
+mujoco>=3.3,<4

@@ -1,0 +1,191 @@
+{
+  "$id": "https://so101.local/schemas/thor-worker/compatibility.schema.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$comment": "benchmark_contract.py additionally derives missing_required and checks equal CUDA device/capability counts.",
+  "$defs": {
+    "nullableString": {
+      "type": ["string", "null"]
+    }
+  },
+  "additionalProperties": false,
+  "properties": {
+    "captured_utc": {
+      "pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2}Z$",
+      "type": "string"
+    },
+    "complete_for_target": {
+      "type": "boolean"
+    },
+    "container_image": {
+      "oneOf": [
+        {"const": "HOST-NATIVE"},
+        {
+          "pattern": "^(?!.*@sha256:0{64}$)\\S+@sha256:[0-9a-f]{64}$",
+          "type": "string"
+        }
+      ]
+    },
+    "host": {
+      "additionalProperties": false,
+      "properties": {
+        "architecture": {"$ref": "#/$defs/nullableString"},
+        "jetpack": {"$ref": "#/$defs/nullableString"},
+        "kernel": {"$ref": "#/$defs/nullableString"},
+        "l4t_release": {"$ref": "#/$defs/nullableString"},
+        "machine_model": {"$ref": "#/$defs/nullableString"},
+        "memory_bytes": {
+          "anyOf": [
+            {"minimum": 1, "type": "integer"},
+            {"type": "null"}
+          ]
+        },
+        "os_release": {
+          "additionalProperties": {"type": "string"},
+          "type": "object"
+        }
+      },
+      "required": [
+        "architecture",
+        "machine_model",
+        "kernel",
+        "os_release",
+        "l4t_release",
+        "jetpack",
+        "memory_bytes"
+      ],
+      "type": "object"
+    },
+    "qualification": {
+      "additionalProperties": false,
+      "allOf": [
+        {
+          "if": {"properties": {"mode": {"const": "qualification-only"}}},
+          "then": {"properties": {"wheelhouse_manifest_sha256": {"type": "null"}}}
+        },
+        {
+          "if": {"properties": {"mode": {"const": "locked"}}},
+          "then": {
+            "properties": {
+              "wheelhouse_manifest_sha256": {
+                "pattern": "^(?!0{64}$)[0-9a-f]{64}$",
+                "type": "string"
+              }
+            }
+          }
+        }
+      ],
+      "properties": {
+        "mode": {"enum": ["qualification-only", "locked"]},
+        "wheelhouse_manifest_sha256": {"type": ["string", "null"]}
+      },
+      "required": ["mode", "wheelhouse_manifest_sha256"],
+      "type": "object"
+    },
+    "missing_required": {
+      "items": {"type": "string"},
+      "type": "array",
+      "uniqueItems": true
+    },
+    "runtime": {
+      "additionalProperties": false,
+      "properties": {
+        "cuda": {"$ref": "#/$defs/nullableString"},
+        "cudnn": {"$ref": "#/$defs/nullableString"},
+        "lerobot": {"$ref": "#/$defs/nullableString"},
+        "mujoco": {"$ref": "#/$defs/nullableString"},
+        "numpy": {"$ref": "#/$defs/nullableString"},
+        "python": {"$ref": "#/$defs/nullableString"},
+        "python_implementation": {"$ref": "#/$defs/nullableString"},
+        "tensorrt": {"$ref": "#/$defs/nullableString"},
+        "torch": {
+          "additionalProperties": false,
+          "allOf": [
+            {
+              "if": {"properties": {"cuda_available": {"const": true}}},
+              "then": {
+                "properties": {
+                  "compute_capabilities": {
+                    "items": {"pattern": "^[0-9]+\\.[0-9]+$", "type": "string"},
+                    "minItems": 1,
+                    "type": "array"
+                  },
+                  "device_names": {
+                    "items": {"minLength": 1, "type": "string"},
+                    "minItems": 1,
+                    "type": "array"
+                  }
+                }
+              }
+            },
+            {
+              "if": {"properties": {"cuda_available": {"const": false}}},
+              "then": {
+                "properties": {
+                  "compute_capabilities": {"maxItems": 0},
+                  "device_names": {"maxItems": 0}
+                }
+              }
+            }
+          ],
+          "properties": {
+            "compute_capabilities": {
+              "items": {"type": "string"},
+              "type": "array"
+            },
+            "cuda_available": {"type": "boolean"},
+            "cuda_build": {"$ref": "#/$defs/nullableString"},
+            "cudnn": {"$ref": "#/$defs/nullableString"},
+            "device_names": {
+              "items": {"type": "string"},
+              "type": "array"
+            },
+            "version": {"$ref": "#/$defs/nullableString"}
+          },
+          "required": [
+            "version",
+            "cuda_build",
+            "cuda_available",
+            "cudnn",
+            "device_names",
+            "compute_capabilities"
+          ],
+          "type": "object"
+        }
+      },
+      "required": [
+        "python",
+        "python_implementation",
+        "cuda",
+        "cudnn",
+        "tensorrt",
+        "torch",
+        "lerobot",
+        "mujoco",
+        "numpy"
+      ],
+      "type": "object"
+    },
+    "schema_version": {"const": 1},
+    "source_commit": {
+      "pattern": "^(?!0{40}$)[0-9a-f]{40}$",
+      "type": "string"
+    },
+    "target": {
+      "enum": ["thor", "g15", "other"]
+    }
+  },
+  "required": [
+    "schema_version",
+    "captured_utc",
+    "target",
+    "source_commit",
+    "container_image",
+    "qualification",
+    "host",
+    "runtime",
+    "complete_for_target",
+    "missing_required"
+  ],
+  "title": "SO-101 worker compatibility tuple",
+  "type": "object"
+}

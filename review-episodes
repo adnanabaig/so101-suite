@@ -1,0 +1,4 @@
+#!/usr/bin/env bash
+set -euo pipefail
+ROOT="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd)"
+exec "$ROOT/.artifacts/foxglove-venv/bin/python" -I "$ROOT/scripts/review_mcap_episodes.py" "$@"

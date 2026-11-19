@@ -1,0 +1,19 @@
+#!/usr/bin/env bash
+set -euo pipefail
+suite_root="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd)"
+cd "$suite_root"
+unset PYTHONPATH LEROBOT_HOME
+for setting in ${!SO101_@}; do
+    unset "$setting"
+done
+export SO101_HOME="$suite_root/data/real-home"
+export SO101_BACKEND=real SO101_MOCK=0
+export SO101_DATA_DIR="$suite_root/data/real"
+export SO101_DATASETS_DIR="$suite_root/datasets/real"
+export SO101_OUTPUTS_DIR="$suite_root/outputs/real"
+export SO101_HOST=127.0.0.1 SO101_PORT=8000 SO101_CORS_ORIGINS=
+if [[ ! -f .env ]]; then
+    echo 'Missing .env; configure the rig before collecting real data.' >&2
+    exit 1
+fi
+exec "$suite_root/.venv/bin/python" -I "$suite_root/scripts/calibrate_arm_manual.py" "$@"

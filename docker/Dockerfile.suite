@@ -1,0 +1,38 @@
+# One-image mock/CPU deployment: builds the workstation UI and lets FastAPI
+# serve it. Mock hardware only; real hardware runs on the host (see
+# Dockerfile.api).
+#
+# Unverified: Docker was not available when the non-root user and the health
+# check were added (audit B18).
+FROM node:24-slim AS web
+WORKDIR /web
+COPY frontend/package*.json ./
+RUN npm ci
+COPY frontend ./
+RUN npm run build
+
+FROM python:3.12-slim
+WORKDIR /app
+# Debian drops old package versions from its mirrors, so pinned apt versions
+# would break rebuilds.
+# hadolint ignore=DL3008
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    libgl1 libglib2.0-0 && rm -rf /var/lib/apt/lists/*
+# hatch_build.py is the build hook pyproject.toml declares; the install fails
+# without it.
+COPY pyproject.toml README.md LICENSE hatch_build.py ./
+COPY src ./src
+COPY --from=web /web/dist ./frontend/dist
+RUN pip install --no-cache-dir -e .
+
+# Run unprivileged, as uid 1000 (see Dockerfile.api).
+RUN useradd --uid 1000 --create-home so101 \
+    && mkdir -p data datasets outputs \
+    && chown so101:so101 data datasets outputs
+USER 1000:1000
+
+ENV SO101_MOCK=1 SO101_HOST=0.0.0.0 SO101_PORT=8000
+EXPOSE 8000
+HEALTHCHECK --interval=10s --timeout=5s --start-period=30s --retries=3 \
+    CMD ["python", "-c", "import urllib.request; urllib.request.urlopen('http://127.0.0.1:8000/api/health', timeout=4)"]
+CMD ["uvicorn", "--factory", "so101.services.app:create_app", "--host", "0.0.0.0", "--port", "8000"]

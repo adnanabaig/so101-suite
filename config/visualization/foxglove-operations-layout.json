@@ -1,0 +1,429 @@
+{
+  "configById": {
+    "ThreeDee!so101_1": {
+      "topics": {
+        "/robot/encoder/scene": {
+          "visible": true
+        }
+      },
+      "cameraState": {
+        "distance": 0.85,
+        "perspective": true,
+        "phi": 65,
+        "targetOffset": [
+          0,
+          0,
+          0.18
+        ],
+        "thetaOffset": 35
+      },
+      "followTf": "robot_base",
+      "fixedFrame": "robot_base",
+      "title": "Live encoder pose \u2014 physical alignment must be qualified"
+    },
+    "Tab!so101_2": {
+      "activeTabIdx": 0,
+      "tabs": [
+        {
+          "title": "obsbot",
+          "layout": "Image!so101_3"
+        },
+        {
+          "title": "camera_1",
+          "layout": "Image!so101_4"
+        },
+        {
+          "title": "camera_2",
+          "layout": "Image!so101_5"
+        },
+        {
+          "title": "realsense",
+          "layout": "Image!so101_6"
+        }
+      ]
+    },
+    "Image!so101_3": {
+      "imageMode": {
+        "imageTopic": "/camera/obsbot/image"
+      },
+      "title": "Live camera \u2014 obsbot"
+    },
+    "Image!so101_4": {
+      "imageMode": {
+        "imageTopic": "/camera/camera_1/image"
+      },
+      "title": "Live camera \u2014 camera_1"
+    },
+    "Image!so101_5": {
+      "imageMode": {
+        "imageTopic": "/camera/camera_2/image"
+      },
+      "title": "Live camera \u2014 camera_2"
+    },
+    "Image!so101_6": {
+      "imageMode": {
+        "imageTopic": "/camera/realsense/image"
+      },
+      "title": "Live camera \u2014 realsense"
+    },
+    "Tab!so101_7": {
+      "activeTabIdx": 0,
+      "tabs": [
+        {
+          "title": "shoulder_pan",
+          "layout": "Plot!so101_8"
+        },
+        {
+          "title": "shoulder_lift",
+          "layout": "Plot!so101_9"
+        },
+        {
+          "title": "elbow_flex",
+          "layout": "Plot!so101_10"
+        },
+        {
+          "title": "wrist_flex",
+          "layout": "Plot!so101_11"
+        },
+        {
+          "title": "wrist_roll",
+          "layout": "Plot!so101_12"
+        },
+        {
+          "title": "gripper",
+          "layout": "Plot!so101_13"
+        },
+        {
+          "title": "Timing",
+          "layout": "Plot!so101_14"
+        }
+      ]
+    },
+    "Plot!so101_8": {
+      "paths": [
+        {
+          "enabled": true,
+          "label": "Leader intent",
+          "value": "/robot/control_tick.joints.shoulder_pan.desired"
+        },
+        {
+          "enabled": true,
+          "label": "Accepted command",
+          "value": "/robot/control_tick.joints.shoulder_pan.commanded"
+        },
+        {
+          "enabled": true,
+          "label": "Follower measured",
+          "value": "/robot/encoder/joints.measured.shoulder_pan"
+        }
+      ],
+      "showLegend": true,
+      "followingViewWidth": 20,
+      "title": "shoulder_pan \u2014 degrees"
+    },
+    "Plot!so101_9": {
+      "paths": [
+        {
+          "enabled": true,
+          "label": "Leader intent",
+          "value": "/robot/control_tick.joints.shoulder_lift.desired"
+        },
+        {
+          "enabled": true,
+          "label": "Accepted command",
+          "value": "/robot/control_tick.joints.shoulder_lift.commanded"
+        },
+        {
+          "enabled": true,
+          "label": "Follower measured",
+          "value": "/robot/encoder/joints.measured.shoulder_lift"
+        }
+      ],
+      "showLegend": true,
+      "followingViewWidth": 20,
+      "title": "shoulder_lift \u2014 degrees"
+    },
+    "Plot!so101_10": {
+      "paths": [
+        {
+          "enabled": true,
+          "label": "Leader intent",
+          "value": "/robot/control_tick.joints.elbow_flex.desired"
+        },
+        {
+          "enabled": true,
+          "label": "Accepted command",
+          "value": "/robot/control_tick.joints.elbow_flex.commanded"
+        },
+        {
+          "enabled": true,
+          "label": "Follower measured",
+          "value": "/robot/encoder/joints.measured.elbow_flex"
+        }
+      ],
+      "showLegend": true,
+      "followingViewWidth": 20,
+      "title": "elbow_flex \u2014 degrees"
+    },
+    "Plot!so101_11": {
+      "paths": [
+        {
+          "enabled": true,
+          "label": "Leader intent",
+          "value": "/robot/control_tick.joints.wrist_flex.desired"
+        },
+        {
+          "enabled": true,
+          "label": "Accepted command",
+          "value": "/robot/control_tick.joints.wrist_flex.commanded"
+        },
+        {
+          "enabled": true,
+          "label": "Follower measured",
+          "value": "/robot/encoder/joints.measured.wrist_flex"
+        }
+      ],
+      "showLegend": true,
+      "followingViewWidth": 20,
+      "title": "wrist_flex \u2014 degrees"
+    },
+    "Plot!so101_12": {
+      "paths": [
+        {
+          "enabled": true,
+          "label": "Leader intent",
+          "value": "/robot/control_tick.joints.wrist_roll.desired"
+        },
+        {
+          "enabled": true,
+          "label": "Accepted command",
+          "value": "/robot/control_tick.joints.wrist_roll.commanded"
+        },
+        {
+          "enabled": true,
+          "label": "Follower measured",
+          "value": "/robot/encoder/joints.measured.wrist_roll"
+        }
+      ],
+      "showLegend": true,
+      "followingViewWidth": 20,
+      "title": "wrist_roll \u2014 degrees"
+    },
+    "Plot!so101_13": {
+      "paths": [
+        {
+          "enabled": true,
+          "label": "Leader intent",
+          "value": "/robot/control_tick.joints.gripper.desired"
+        },
+        {
+          "enabled": true,
+          "label": "Accepted command",
+          "value": "/robot/control_tick.joints.gripper.commanded"
+        },
+        {
+          "enabled": true,
+          "label": "Follower measured",
+          "value": "/robot/encoder/joints.measured.gripper"
+        }
+      ],
+      "showLegend": true,
+      "followingViewWidth": 20,
+      "title": "gripper \u2014 percent"
+    },
+    "Plot!so101_14": {
+      "paths": [
+        {
+          "enabled": true,
+          "label": "Cycle start interval",
+          "value": "/robot/control_tick.timing.cycle_interval_seconds"
+        },
+        {
+          "enabled": true,
+          "label": "Bus lock wait",
+          "value": "/robot/control_tick.timing.io_lock_wait_seconds"
+        },
+        {
+          "enabled": true,
+          "label": "Motor/control step",
+          "value": "/robot/control_tick.timing.motor_step_seconds"
+        },
+        {
+          "enabled": true,
+          "label": "Previous telemetry/recording tail",
+          "value": "/robot/control_tick.timing.previous_tail_seconds"
+        },
+        {
+          "enabled": true,
+          "label": "Previous pacing deadline lateness",
+          "value": "/robot/control_tick.timing.previous_pacing.deadline_lateness_seconds"
+        }
+      ],
+      "showLegend": true,
+      "followingViewWidth": 20,
+      "title": "Control timing \u2014 seconds; available in instrumented captures"
+    },
+    "Tab!so101_15": {
+      "activeTabIdx": 0,
+      "tabs": [
+        {
+          "title": "Robot status",
+          "layout": "RawMessages!so101_16"
+        },
+        {
+          "title": "Encoder freshness",
+          "layout": "RawMessages!so101_17"
+        },
+        {
+          "title": "Stops and ownership",
+          "layout": "RawMessages!so101_18"
+        },
+        {
+          "title": "Recorder and episodes",
+          "layout": "RawMessages!so101_19"
+        },
+        {
+          "title": "Preflight report",
+          "layout": "RawMessages!so101_20"
+        },
+        {
+          "title": "Capture continuity",
+          "layout": "RawMessages!so101_21"
+        },
+        {
+          "title": "Episode review",
+          "layout": "RawMessages!so101_22"
+        },
+        {
+          "title": "Matching episode",
+          "layout": "RawMessages!so101_23"
+        },
+        {
+          "title": "Capture provenance",
+          "layout": "RawMessages!so101_24"
+        },
+        {
+          "title": "Episode boundaries",
+          "layout": "RawMessages!so101_25"
+        },
+        {
+          "title": "Motor health",
+          "layout": "RawMessages!so101_26"
+        },
+        {
+          "title": "Control samples",
+          "layout": "RawMessages!so101_27"
+        },
+        {
+          "title": "Camera timing",
+          "layout": "RawMessages!so101_28"
+        },
+        {
+          "title": "Follower calibration",
+          "layout": "RawMessages!so101_29"
+        },
+        {
+          "title": "Leader calibration",
+          "layout": "RawMessages!so101_30"
+        }
+      ]
+    },
+    "RawMessages!so101_16": {
+      "defaultExpanded": true,
+      "topicPath": "/robot/status",
+      "title": "Robot status"
+    },
+    "RawMessages!so101_17": {
+      "defaultExpanded": true,
+      "topicPath": "/robot/encoder/status",
+      "title": "Encoder freshness"
+    },
+    "RawMessages!so101_18": {
+      "defaultExpanded": true,
+      "topicPath": "/control/state",
+      "title": "Stops and ownership"
+    },
+    "RawMessages!so101_19": {
+      "defaultExpanded": true,
+      "topicPath": "/recording/status",
+      "title": "Recorder and episodes"
+    },
+    "RawMessages!so101_20": {
+      "defaultExpanded": true,
+      "topicPath": "/diagnostics/preflight",
+      "title": "Preflight report"
+    },
+    "RawMessages!so101_21": {
+      "defaultExpanded": true,
+      "topicPath": "/robot/control_capture",
+      "title": "Capture continuity"
+    },
+    "RawMessages!so101_22": {
+      "defaultExpanded": true,
+      "topicPath": "/recording/review",
+      "title": "Episode review"
+    },
+    "RawMessages!so101_23": {
+      "defaultExpanded": true,
+      "topicPath": "/recording/episode",
+      "title": "Matching episode"
+    },
+    "RawMessages!so101_24": {
+      "defaultExpanded": true,
+      "topicPath": "/recording/metadata",
+      "title": "Capture provenance"
+    },
+    "RawMessages!so101_25": {
+      "defaultExpanded": true,
+      "topicPath": "/recording/episodes",
+      "title": "Episode boundaries"
+    },
+    "RawMessages!so101_26": {
+      "defaultExpanded": true,
+      "topicPath": "/robot/health",
+      "title": "Motor health"
+    },
+    "RawMessages!so101_27": {
+      "defaultExpanded": true,
+      "topicPath": "/robot/control_tick",
+      "title": "Control samples"
+    },
+    "RawMessages!so101_28": {
+      "defaultExpanded": true,
+      "topicPath": "/camera/obsbot/status",
+      "title": "Camera timing"
+    },
+    "RawMessages!so101_29": {
+      "defaultExpanded": true,
+      "topicPath": "/calibration/installed",
+      "title": "Follower calibration"
+    },
+    "RawMessages!so101_30": {
+      "defaultExpanded": true,
+      "topicPath": "/calibration/installed_leader",
+      "title": "Leader calibration"
+    }
+  },
+  "globalVariables": {},
+  "userNodes": {},
+  "linkedGlobalVariables": [],
+  "playbackConfig": {
+    "speed": 1
+  },
+  "layout": {
+    "direction": "column",
+    "first": {
+      "direction": "row",
+      "first": "ThreeDee!so101_1",
+      "second": "Tab!so101_2",
+      "splitPercentage": 50.0
+    },
+    "second": {
+      "direction": "row",
+      "first": "Tab!so101_7",
+      "second": "Tab!so101_15",
+      "splitPercentage": 50.0
+    },
+    "splitPercentage": 66.66666666666667
+  }
+}

@@ -1,0 +1,11 @@
+{
+  "name": "so101-operator",
+  "publisher": "so101-suite",
+  "version": "0.1.0",
+  "description": "Local SO101 Suite operator UI inside Foxglove; all control remains in the Suite server",
+  "license": "MIT",
+  "main": "dist/extension.js",
+  "scripts": {
+    "build": "node ../../frontend/node_modules/typescript/bin/tsc --project tsconfig.json"
+  }
+}

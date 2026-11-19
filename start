@@ -1,0 +1,10 @@
+#!/usr/bin/env bash
+# One-command local real-backend setup and launch.
+set -euo pipefail
+suite_root="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd)"
+if [[ ! -x "$suite_root/.venv/bin/python" ]]; then
+    echo 'Missing .venv; install the software with make bootstrap first.' >&2
+    exit 1
+fi
+exec env -u PYTHONPATH -u LEROBOT_HOME \
+    "$suite_root/.venv/bin/python" -I "$suite_root/scripts/start_local.py" "$@"

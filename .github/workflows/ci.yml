@@ -1,0 +1,151 @@
+# CI for the SO-101 suite. Each job runs a make target, so `make ci` runs the
+# same steps locally (see CONTRIBUTING.md). No job touches robot hardware: the
+# tests and the smoke server use mock hardware, and the stop targets (make
+# estop/halt/collapse) are never run here.
+#
+# Actions are pinned to full commit SHAs; the comment names the release. To
+# update one, look up the new tag's commit with
+#   git ls-remote --tags https://github.com/actions/<name>
+# and replace both the SHA and the comment.
+name: CI
+
+on:
+  push:
+    branches: [main, master, "v*"]
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ci-${{ github.ref }}
+  # A new push to a pull request cancels its older run; branch runs finish.
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
+
+defaults:
+  run:
+    shell: bash
+
+env:
+  PIP_DISABLE_PIP_VERSION_CHECK: "1"
+  PYTHONUNBUFFERED: "1"
+
+jobs:
+  backend:
+    name: backend (Python ${{ matrix.python-version }}; ruff, mypy, pytest + floors, Thor)
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    strategy:
+      fail-fast: false
+      matrix:
+        # requires-python promises both minors; the complete backend gate runs on each.
+        python-version: ["3.12", "3.13"]
+    env:
+      # Headless MuJoCo rendering through EGL, for the simulation tests.
+      MUJOCO_GL: egl
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+          # Full history: the HIL quote tests read the v0.2 design at the commit
+          # that added it, and would otherwise skip outside the skip budget.
+          fetch-depth: 0
+      - uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97 # v7.0.0
+        with:
+          python-version: ${{ matrix.python-version }}
+          cache: pip
+          cache-dependency-path: pyproject.toml
+      # Best effort: these libraries only matter for rendering, so an apt failure
+      # must not fail the job. Tests that render must skip when no GL context
+      # can be created (no current test renders).
+      - name: Install EGL/OpenGL libraries for headless rendering (best effort)
+        continue-on-error: true
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y --no-install-recommends \
+            libegl1 libegl-mesa0 libgl1 libgl1-mesa-dri libgles2 libopengl0
+      # The sim extra (MuJoCo) arrives with the physics simulation. Until then
+      # pip warns "does not provide the extra 'sim'" and installs the rest.
+      - name: Install so101 with the dev and sim extras
+        run: python -m pip install -e ".[dev,sim]"
+      - name: Lint (ruff check, ruff format --check, mypy)
+        run: make lint
+      # Fails when tests skip beyond tests/skip-budget.toml (CONTRIBUTING.md).
+      - name: Tests with branch coverage and the skip budget, then the per-file floors
+        run: make coverage
+      - name: Optional Thor worker host contracts (no Thor, CUDA, or Docker needed)
+        run: make ci-thor-worker
+
+  frontend:
+    name: frontend (npm ci, lint, test, build, audit)
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
+        with:
+          node-version: "24" # the Node LTS line the suite targets (README: Prerequisites)
+          cache: npm
+          cache-dependency-path: frontend/package-lock.json
+      # Fails up front if package.json lacks the lint, test or build script.
+      - name: npm ci, lint, typecheck, test, build, npm audit --audit-level=high
+        run: make ci-frontend
+
+  smoke:
+    name: smoke (Python ${{ matrix.python-version }}; throwaway mock API)
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    strategy:
+      fail-fast: false
+      matrix:
+        python-version: ["3.12", "3.13"]
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97 # v7.0.0
+        with:
+          python-version: ${{ matrix.python-version }}
+          cache: pip
+          cache-dependency-path: pyproject.toml
+      - name: Install so101
+        run: python -m pip install -e .
+      # Starts uvicorn with SO101_MOCK=1 and temp data dirs on a free port,
+      # runs scripts/smoke_suite.py against it, then stops the server.
+      - name: Smoke-test a throwaway mock API
+        run: make ci-smoke
+
+  wheel:
+    name: wheel (Python ${{ matrix.python-version }}; UI, package, clean install)
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    strategy:
+      fail-fast: false
+      matrix:
+        python-version: ["3.12", "3.13"]
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97 # v7.0.0
+        with:
+          python-version: ${{ matrix.python-version }}
+          cache: pip
+          cache-dependency-path: pyproject.toml
+      - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
+        with:
+          node-version: "24"
+          cache: npm
+          cache-dependency-path: frontend/package-lock.json
+      - name: Install wheel and built-UI test dependencies
+        run: python -m pip install -e ".[dev]"
+      # npm ci + the UI build, the backend's containment test over every built
+      # path, then SO101_REQUIRE_UI=1 python -m build,
+      # scripts/check_dist.py --ui required (contents, no tests/secrets/.env/
+      # node_modules, simulation assets when present) and scripts/wheel_smoke.py
+      # (clean venv: so101 --help, so101 info).
+      - name: Build UI, check its paths, and check the sdist and wheel
+        run: make ci-wheel

@@ -1,0 +1,105 @@
+{
+  "$id": "https://so101.local/schemas/thor-worker/execution-compatibility.schema.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$comment": "The runner additionally compares source_commit, container_image, cuDNN and wheelhouse digests with the executing immutable image.",
+  "allOf": [
+    {"$ref": "compatibility.schema.json"},
+    {
+      "properties": {
+        "complete_for_target": {"const": true},
+        "container_image": {
+          "pattern": "^(?!.*@sha256:0{64}$)\\S+@sha256:[0-9a-f]{64}$",
+          "type": "string"
+        },
+        "host": {
+          "properties": {
+            "architecture": {"const": "aarch64"},
+            "jetpack": {"minLength": 1, "type": "string"},
+            "kernel": {"minLength": 1, "type": "string"},
+            "l4t_release": {"minLength": 1, "type": "string"},
+            "machine_model": {"pattern": "[Tt][Hh][Oo][Rr]", "type": "string"}
+          }
+        },
+        "missing_required": {"maxItems": 0},
+        "qualification": {
+          "properties": {
+            "mode": {"const": "locked"},
+            "wheelhouse_manifest_sha256": {
+              "pattern": "^(?!0{64}$)[0-9a-f]{64}$",
+              "type": "string"
+            }
+          }
+        },
+        "runtime": {
+          "properties": {
+            "cuda": {
+              "pattern": "^[0-9]+(?:\\.[0-9]+)+$",
+              "type": "string"
+            },
+            "cudnn": {"minLength": 1, "type": "string"},
+            "lerobot": {"const": "0.6.1"},
+            "python": {
+              "pattern": "^3\\.(?:12|13)\\.[0-9]+(?:[+.-][A-Za-z0-9._-]+)?$",
+              "type": "string"
+            },
+            "tensorrt": {"minLength": 1, "type": "string"},
+            "torch": {
+              "properties": {
+                "compute_capabilities": {
+                  "items": {"pattern": "^[0-9]+\\.[0-9]+$", "type": "string"},
+                  "maxItems": 1,
+                  "minItems": 1,
+                  "type": "array"
+                },
+                "cuda_available": {"const": true},
+                "cuda_build": {
+                  "pattern": "^[0-9]+(?:\\.[0-9]+)+$",
+                  "type": "string"
+                },
+                "cudnn": {"minLength": 1, "type": "string"},
+                "device_names": {
+                  "items": {"minLength": 1, "type": "string"},
+                  "maxItems": 1,
+                  "minItems": 1,
+                  "type": "array"
+                },
+                "version": {
+                  "pattern": "^[0-9]+\\.[0-9]+(?:\\.[0-9]+)?[A-Za-z0-9.+_-]*$",
+                  "type": "string"
+                }
+              }
+            }
+          }
+        },
+        "target": {"const": "thor"}
+      }
+    }
+  ],
+  "additionalProperties": false,
+  "properties": {
+    "captured_utc": {},
+    "complete_for_target": {},
+    "container_image": {},
+    "host": {},
+    "missing_required": {},
+    "qualification": {},
+    "runtime": {},
+    "schema_version": {},
+    "source_commit": {},
+    "target": {}
+  },
+  "required": [
+    "schema_version",
+    "captured_utc",
+    "target",
+    "source_commit",
+    "container_image",
+    "qualification",
+    "host",
+    "runtime",
+    "complete_for_target",
+    "missing_required"
+  ],
+  "title": "SO-101 locked Thor execution compatibility",
+  "type": "object"
+}

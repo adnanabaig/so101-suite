@@ -1,0 +1,14 @@
+*
+!scripts/
+!scripts/runtime_probe.py
+!scripts/dependency_probe.py
+!scripts/run_benchmarks.py
+!scripts/artifact_manifest.py
+!scripts/benchmark_contract.py
+!scripts/validate_result.py
+!requirements-worker.txt
+!configs/
+!configs/smoke.json
+!schemas/
+!schemas/*.json
+!README.md

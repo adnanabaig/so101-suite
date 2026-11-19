@@ -1,0 +1,16 @@
+#!/usr/bin/env bash
+set -euo pipefail
+systemctl --user start so101-arm-camera.service
+runtime_dir="${XDG_RUNTIME_DIR:-/run/user/$(id -u)}"
+exec 9>"$runtime_dir/so101-obs-arms.lock"
+if ! flock -n 9; then
+    echo 'OBS launcher is already active. Use the existing OBS window.'
+    exit 0
+fi
+if pgrep -u "$(id -u)" -x obs >/dev/null; then
+    echo 'OBS is already running. Use its existing window and select scene Arms live.'
+    exit 0
+fi
+export XDG_DATA_DIRS="${XDG_DATA_DIRS:-/usr/local/share:/usr/share}:/var/lib/flatpak/exports/share:$HOME/.local/share/flatpak/exports/share"
+# Keep this shell alive to hold the lock throughout startup and the OBS session.
+flatpak run com.obsproject.Studio --collection 'SO101 Arms' --profile 'SO101 Arms' "$@"

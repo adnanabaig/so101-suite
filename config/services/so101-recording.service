@@ -1,0 +1,16 @@
+[Unit]
+Description=SO101 local MCAP camera and motor telemetry recording
+After=so101-motor.service so101-arm-camera.service so101-camera-1.service so101-camera-2.service
+Wants=so101-arm-camera.service so101-camera-1.service so101-camera-2.service
+PartOf=so101-suite.target
+
+[Service]
+Type=simple
+WorkingDirectory=/home/adnan/so101-suite
+ExecStart=/usr/bin/env -u PYTHONPATH -u LEROBOT_HOME /home/adnan/so101-suite/.artifacts/foxglove-venv/bin/python -I /home/adnan/so101-suite/scripts/record_mcap.py --storage-profile /home/adnan/so101-suite/config/rigs/mcap-storage.local.json
+Restart=on-failure
+RestartPreventExitStatus=2 78
+RestartSec=10
+TimeoutStopSec=25
+UMask=0077
+

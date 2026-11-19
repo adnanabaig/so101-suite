@@ -1,0 +1,195 @@
+{
+  "$id": "https://so101.local/schemas/thor-worker/benchmark-config.schema.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$defs": {
+    "datasetParameters": {
+      "additionalProperties": false,
+      "allOf": [
+        {
+          "if": {"properties": {"mode": {"const": "synthetic"}}},
+          "then": {
+            "properties": {
+              "artifact_path": {"type": "null"},
+              "bytes_per_iteration": {
+                "maximum": 1073741824,
+                "minimum": 1,
+                "type": "integer"
+              },
+              "manifest_sha256": {"type": "null"}
+            }
+          }
+        },
+        {
+          "if": {"properties": {"mode": {"const": "artifact"}}},
+          "then": {
+            "properties": {
+              "artifact_path": {
+                "pattern": "^(?!/)(?!.*//)(?!.*\\/$)(?!.*\\\\)(?!.*(?:^|/)\\.{1,2}(?:/|$))[^\\u0000-\\u001F\\u007F]+$",
+                "type": "string"
+              },
+              "bytes_per_iteration": {"type": "null"},
+              "manifest_sha256": {
+                "pattern": "^[0-9a-f]{64}$",
+                "type": "string"
+              }
+            }
+          }
+        }
+      ],
+      "properties": {
+        "artifact_path": {"type": ["string", "null"]},
+        "bytes_per_iteration": {"type": ["integer", "null"]},
+        "iterations": {"maximum": 10000, "minimum": 1, "type": "integer"},
+        "manifest_sha256": {"type": ["string", "null"]},
+        "mode": {"enum": ["synthetic", "artifact"]}
+      },
+      "required": ["mode", "bytes_per_iteration", "iterations", "artifact_path", "manifest_sha256"],
+      "type": "object"
+    },
+    "inferenceParameters": {
+      "additionalProperties": false,
+      "properties": {
+        "batch_size": {"maximum": 4096, "minimum": 1, "type": "integer"},
+        "device": {"enum": ["cpu", "cuda", "auto"]},
+        "hidden_features": {"maximum": 65536, "minimum": 1, "type": "integer"},
+        "input_features": {"maximum": 65536, "minimum": 1, "type": "integer"},
+        "iterations": {"maximum": 100000, "minimum": 1, "type": "integer"},
+        "output_features": {"maximum": 65536, "minimum": 1, "type": "integer"},
+        "policy": {"const": "synthetic_mlp_v1"},
+        "precision": {"enum": ["float32", "float16", "bfloat16"]},
+        "warmup": {"maximum": 1000, "minimum": 0, "type": "integer"}
+      },
+      "required": [
+        "policy",
+        "device",
+        "precision",
+        "batch_size",
+        "input_features",
+        "hidden_features",
+        "output_features",
+        "warmup",
+        "iterations"
+      ],
+      "type": "object"
+    },
+    "simParameters": {
+      "additionalProperties": false,
+      "properties": {
+        "model": {"const": "synthetic_pendulum_v1"},
+        "steps": {"maximum": 10000000, "minimum": 1, "type": "integer"}
+      },
+      "required": ["model", "steps"],
+      "type": "object"
+    },
+    "torchParameters": {
+      "additionalProperties": false,
+      "properties": {
+        "device": {"enum": ["cpu", "cuda", "auto"]},
+        "iterations": {"maximum": 10000, "minimum": 1, "type": "integer"},
+        "matrix_size": {"maximum": 8192, "minimum": 2, "type": "integer"},
+        "precision": {"enum": ["float32", "float16", "bfloat16"]},
+        "warmup": {"maximum": 1000, "minimum": 0, "type": "integer"}
+      },
+      "required": ["device", "precision", "matrix_size", "warmup", "iterations"],
+      "type": "object"
+    },
+    "workload": {
+      "oneOf": [
+        {
+          "additionalProperties": false,
+          "properties": {
+            "enabled": {"type": "boolean"},
+            "name": {"const": "dataset"},
+            "parameters": {"$ref": "#/$defs/datasetParameters"}
+          },
+          "required": ["name", "enabled", "parameters"],
+          "type": "object"
+        },
+        {
+          "additionalProperties": false,
+          "properties": {
+            "enabled": {"type": "boolean"},
+            "name": {"const": "torch"},
+            "parameters": {"$ref": "#/$defs/torchParameters"}
+          },
+          "required": ["name", "enabled", "parameters"],
+          "type": "object"
+        },
+        {
+          "additionalProperties": false,
+          "properties": {
+            "enabled": {"type": "boolean"},
+            "name": {"const": "inference"},
+            "parameters": {"$ref": "#/$defs/inferenceParameters"}
+          },
+          "required": ["name", "enabled", "parameters"],
+          "type": "object"
+        },
+        {
+          "additionalProperties": false,
+          "properties": {
+            "enabled": {"type": "boolean"},
+            "name": {"const": "sim"},
+            "parameters": {"$ref": "#/$defs/simParameters"}
+          },
+          "required": ["name", "enabled", "parameters"],
+          "type": "object"
+        }
+      ]
+    }
+  },
+  "additionalProperties": false,
+  "properties": {
+    "benchmark_id": {
+      "pattern": "^[A-Za-z0-9][A-Za-z0-9._-]{0,127}$",
+      "type": "string"
+    },
+    "comparison": {
+      "additionalProperties": false,
+      "properties": {
+        "absolute_tolerance": {"maximum": 1, "minimum": 0, "type": "number"},
+        "minimum_throughput_ratio": {"maximum": 100, "minimum": 1, "type": "number"},
+        "relative_tolerance": {"maximum": 1, "minimum": 0, "type": "number"}
+      },
+      "required": ["absolute_tolerance", "relative_tolerance", "minimum_throughput_ratio"],
+      "type": "object"
+    },
+    "schema_version": {"const": 1},
+    "seed": {"maximum": 4294967295, "minimum": 0, "type": "integer"},
+    "workloads": {
+      "items": false,
+      "prefixItems": [
+        {
+          "allOf": [
+            {"$ref": "#/$defs/workload"},
+            {"properties": {"name": {"const": "dataset"}}}
+          ]
+        },
+        {
+          "allOf": [
+            {"$ref": "#/$defs/workload"},
+            {"properties": {"name": {"const": "torch"}}}
+          ]
+        },
+        {
+          "allOf": [
+            {"$ref": "#/$defs/workload"},
+            {"properties": {"name": {"const": "inference"}}}
+          ]
+        },
+        {
+          "allOf": [
+            {"$ref": "#/$defs/workload"},
+            {"properties": {"name": {"const": "sim"}}}
+          ]
+        }
+      ],
+      "maxItems": 4,
+      "minItems": 4,
+      "type": "array"
+    }
+  },
+  "required": ["schema_version", "benchmark_id", "seed", "comparison", "workloads"],
+  "title": "SO-101 worker benchmark configuration",
+  "type": "object"
+}

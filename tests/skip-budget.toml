@@ -1,0 +1,62 @@
+# Skip budget for a full test run: `make test`, `make coverage` and the CI
+# backend job pass `--skip-budget tests/skip-budget.toml` (tests/skip_budget.py).
+#
+# The run fails when a test skips for a reason no entry below matches, when an
+# entry's skips exceed its `max`, or when the total exceeds `max_skipped`.
+# A skip hides coverage: fix what makes the test skip before you add or raise
+# an entry, and say why in `why`. See CONTRIBUTING.md ("Skip budget").
+#
+# `reason` is a regular expression searched in the skip message (pytest's
+# "Skipped: " prefix removed). `max_skipped` is the sum of the caps below. On a
+# dev machine or CI runner with the dev and sim extras, no LeRobot, no
+# Pillow/OpenCV, no pyarrow, no pyrealsense2 and no built frontend/dist, 16
+# tests skip (measured on macOS at v0.2.0 + these fixes; 15 with frontend/dist
+# built). The SIGHUP entry skips only on Windows (6) and the rest-pose example
+# entry only without the sim extra (1), so 23 in all.
+
+max_skipped = 23
+
+[[allowed]]
+reason = "could not import '(draccus|lerobot\\.configs\\.train)'"
+max = 1
+why = "tests/test_data_lerobot_contract.py needs LeRobot (the robot extra); robot hosts run it"
+
+[[allowed]]
+reason = "LeRobot is not installed here; robot hosts run this check"
+max = 2
+why = "tests/test_bringup_lerobot061_pin.py checks the installed LeRobot; robot hosts run it"
+
+[[allowed]]
+reason = "set SO101_TEST_LEROBOT_SDIST to the path of lerobot-0\\.6\\.1\\.tar\\.gz"
+max = 9
+why = "the LeRobot 0.6.1 source checks need the sdist on disk; opt-in, never in CI"
+
+[[allowed]]
+reason = "no JPEG encoder installed; the dependency-free fallback is PNG"
+max = 1
+why = "JPEG snapshots need Pillow or OpenCV, neither of which the dev extra installs"
+
+[[allowed]]
+reason = "could not import 'pyarrow"
+max = 1
+why = "the LeRobot parquet prune test needs pyarrow (installed with LeRobot)"
+
+[[allowed]]
+reason = "frontend/dist is not built"
+max = 1
+why = "the built-UI guard test needs `make build-ui`; the CI backend job does not build the UI"
+
+[[allowed]]
+reason = "pyrealsense2 is not installed \\(the realsense extra\\)"
+max = 1
+why = "the RealSense import test needs the realsense extra"
+
+[[allowed]]
+reason = "no SIGHUP on this platform"
+max = 6
+why = "Windows has no SIGHUP; the launcher's and so101 serve's hang-up tests run on Linux and macOS"
+
+[[allowed]]
+reason = "the rest-pose example check needs the sim extra \\(mujoco\\)"
+max = 1
+why = "tests/test_rest_pose_examples.py runs check_rest_pose, which needs MuJoCo; dev and CI install the sim extra"

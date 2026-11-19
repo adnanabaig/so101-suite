@@ -1,0 +1,253 @@
+{
+  "configById": {
+    "Tab!so101_1": {
+      "activeTabIdx": 0,
+      "tabs": [
+        {
+          "title": "Motor encoders",
+          "layout": "ThreeDee!so101_2"
+        },
+        {
+          "title": "Independent simulation",
+          "layout": "ThreeDee!so101_3"
+        }
+      ]
+    },
+    "ThreeDee!so101_2": {
+      "topics": {
+        "/robot/encoder/scene": {
+          "visible": true
+        }
+      },
+      "cameraState": {
+        "distance": 0.85,
+        "perspective": true,
+        "phi": 65,
+        "targetOffset": [
+          0,
+          0,
+          0.18
+        ],
+        "thetaOffset": 35
+      },
+      "followTf": "robot_base",
+      "fixedFrame": "robot_base",
+      "title": "ENCODERS \u2014 physical/model alignment needs review"
+    },
+    "ThreeDee!so101_3": {
+      "topics": {
+        "/simulation/scene": {
+          "visible": true
+        }
+      },
+      "cameraState": {
+        "distance": 0.85,
+        "perspective": true,
+        "phi": 65,
+        "targetOffset": [
+          0,
+          0,
+          0.18
+        ],
+        "thetaOffset": 35
+      },
+      "followTf": "sim_base",
+      "fixedFrame": "sim_base",
+      "title": "SIMULATION \u2014 MuJoCo SO101"
+    },
+    "Image!so101_4": {
+      "imageMode": {
+        "imageTopic": "/camera/obsbot/image"
+      },
+      "title": "LIVE \u2014 OBSBOT Tiny 2 Lite"
+    },
+    "Image!so101_5": {
+      "imageMode": {
+        "imageTopic": "/camera/camera_1/image"
+      },
+      "title": "LIVE \u2014 icSpring camera 1"
+    },
+    "Image!so101_6": {
+      "imageMode": {
+        "imageTopic": "/camera/camera_2/image"
+      },
+      "title": "LIVE \u2014 icSpring camera 2"
+    },
+    "Image!so101_7": {
+      "imageMode": {
+        "imageTopic": "/camera/realsense/image"
+      },
+      "title": "LIVE \u2014 D435i color"
+    },
+    "Plot!so101_8": {
+      "paths": [
+        {
+          "enabled": true,
+          "label": "shoulder_pan",
+          "value": "/simulation/joints.measured.shoulder_pan"
+        },
+        {
+          "enabled": true,
+          "label": "shoulder_lift",
+          "value": "/simulation/joints.measured.shoulder_lift"
+        },
+        {
+          "enabled": true,
+          "label": "elbow_flex",
+          "value": "/simulation/joints.measured.elbow_flex"
+        },
+        {
+          "enabled": true,
+          "label": "wrist_flex",
+          "value": "/simulation/joints.measured.wrist_flex"
+        },
+        {
+          "enabled": true,
+          "label": "wrist_roll",
+          "value": "/simulation/joints.measured.wrist_roll"
+        },
+        {
+          "enabled": true,
+          "label": "gripper",
+          "value": "/simulation/joints.measured.gripper"
+        }
+      ],
+      "showLegend": true,
+      "followingViewWidth": 20,
+      "title": "SIMULATED joint positions \u2014 degrees / gripper %"
+    },
+    "Tab!so101_9": {
+      "activeTabIdx": 0,
+      "tabs": [
+        {
+          "title": "Computer vision",
+          "layout": "Image!so101_10"
+        },
+        {
+          "title": "Encoder freshness",
+          "layout": "RawMessages!so101_11"
+        },
+        {
+          "title": "MCAP episodes",
+          "layout": "RawMessages!so101_12"
+        },
+        {
+          "title": "Simulation status",
+          "layout": "RawMessages!so101_13"
+        },
+        {
+          "title": "OBSBOT status",
+          "layout": "RawMessages!so101_14"
+        },
+        {
+          "title": "Camera 1 status",
+          "layout": "RawMessages!so101_15"
+        },
+        {
+          "title": "Camera 2 status",
+          "layout": "RawMessages!so101_16"
+        },
+        {
+          "title": "Saved calibration",
+          "layout": "RawMessages!so101_17"
+        },
+        {
+          "title": "Saved folded pose",
+          "layout": "RawMessages!so101_18"
+        },
+        {
+          "title": "Saved reference attempt",
+          "layout": "RawMessages!so101_19"
+        }
+      ]
+    },
+    "Image!so101_10": {
+      "imageMode": {
+        "imageTopic": "/camera/obsbot_cv/image"
+      },
+      "title": "OBSBOT motor tags \u2014 green; projection uncalibrated"
+    },
+    "RawMessages!so101_11": {
+      "defaultExpanded": true,
+      "topicPath": "/robot/encoder/status",
+      "title": "Encoder freshness"
+    },
+    "RawMessages!so101_12": {
+      "defaultExpanded": true,
+      "topicPath": "/recording/episodes",
+      "title": "MCAP episodes"
+    },
+    "RawMessages!so101_13": {
+      "defaultExpanded": true,
+      "topicPath": "/simulation/status",
+      "title": "Simulation status"
+    },
+    "RawMessages!so101_14": {
+      "defaultExpanded": true,
+      "topicPath": "/camera/obsbot/status",
+      "title": "OBSBOT status"
+    },
+    "RawMessages!so101_15": {
+      "defaultExpanded": true,
+      "topicPath": "/camera/camera_1/status",
+      "title": "Camera 1 status"
+    },
+    "RawMessages!so101_16": {
+      "defaultExpanded": true,
+      "topicPath": "/camera/camera_2/status",
+      "title": "Camera 2 status"
+    },
+    "RawMessages!so101_17": {
+      "defaultExpanded": true,
+      "topicPath": "/calibration/installed",
+      "title": "Saved calibration"
+    },
+    "RawMessages!so101_18": {
+      "defaultExpanded": true,
+      "topicPath": "/calibration/rest_pose",
+      "title": "Saved folded pose"
+    },
+    "RawMessages!so101_19": {
+      "defaultExpanded": true,
+      "topicPath": "/calibration/shoulder_reference",
+      "title": "Saved reference attempt"
+    }
+  },
+  "globalVariables": {},
+  "userNodes": {},
+  "linkedGlobalVariables": [],
+  "playbackConfig": {
+    "speed": 1
+  },
+  "layout": {
+    "direction": "column",
+    "first": {
+      "direction": "row",
+      "first": "Tab!so101_1",
+      "second": {
+        "direction": "column",
+        "first": "Image!so101_4",
+        "second": {
+          "direction": "column",
+          "first": "Image!so101_5",
+          "second": {
+            "direction": "column",
+            "first": "Image!so101_6",
+            "second": "Image!so101_7",
+            "splitPercentage": 50.0
+          },
+          "splitPercentage": 33.333333333333336
+        },
+        "splitPercentage": 25.0
+      },
+      "splitPercentage": 66.66666666666667
+    },
+    "second": {
+      "direction": "row",
+      "first": "Plot!so101_8",
+      "second": "Tab!so101_9",
+      "splitPercentage": 50.0
+    },
+    "splitPercentage": 66.66666666666667
+  }
+}

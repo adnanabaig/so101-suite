@@ -1,0 +1,344 @@
+{
+  "version": 1,
+  "content": {
+    "type": "split",
+    "direction": "column",
+    "items": [
+      {
+        "proportion": 2,
+        "content": {
+          "type": "split",
+          "direction": "row",
+          "items": [
+            {
+              "proportion": 2,
+              "content": {
+                "type": "tabs",
+                "selectedTabIndex": 0,
+                "tabs": [
+                  {
+                    "title": "Motor encoders",
+                    "content": {
+                      "type": "panel",
+                      "panelType": "ThreeDee",
+                      "config": {
+                        "topics": {
+                          "/robot/encoder/scene": {
+                            "visible": true
+                          }
+                        },
+                        "cameraState": {
+                          "distance": 0.85,
+                          "perspective": true,
+                          "phi": 65,
+                          "targetOffset": [
+                            0,
+                            0,
+                            0.18
+                          ],
+                          "thetaOffset": 35
+                        },
+                        "followTf": "robot_base",
+                        "fixedFrame": "robot_base"
+                      },
+                      "title": "ENCODERS \u2014 physical/model alignment needs review",
+                      "version": 1
+                    }
+                  },
+                  {
+                    "title": "Independent simulation",
+                    "content": {
+                      "type": "panel",
+                      "panelType": "ThreeDee",
+                      "config": {
+                        "topics": {
+                          "/simulation/scene": {
+                            "visible": true
+                          }
+                        },
+                        "cameraState": {
+                          "distance": 0.85,
+                          "perspective": true,
+                          "phi": 65,
+                          "targetOffset": [
+                            0,
+                            0,
+                            0.18
+                          ],
+                          "thetaOffset": 35
+                        },
+                        "followTf": "sim_base",
+                        "fixedFrame": "sim_base"
+                      },
+                      "title": "SIMULATION \u2014 MuJoCo SO101",
+                      "version": 1
+                    }
+                  }
+                ]
+              }
+            },
+            {
+              "proportion": 1,
+              "content": {
+                "type": "split",
+                "direction": "column",
+                "items": [
+                  {
+                    "proportion": 1,
+                    "content": {
+                      "type": "panel",
+                      "panelType": "Image",
+                      "config": {
+                        "imageMode": {
+                          "imageTopic": "/camera/obsbot/image"
+                        }
+                      },
+                      "title": "LIVE \u2014 OBSBOT Tiny 2 Lite",
+                      "version": 1
+                    }
+                  },
+                  {
+                    "proportion": 1,
+                    "content": {
+                      "type": "panel",
+                      "panelType": "Image",
+                      "config": {
+                        "imageMode": {
+                          "imageTopic": "/camera/camera_1/image"
+                        }
+                      },
+                      "title": "LIVE \u2014 icSpring camera 1",
+                      "version": 1
+                    }
+                  },
+                  {
+                    "proportion": 1,
+                    "content": {
+                      "type": "panel",
+                      "panelType": "Image",
+                      "config": {
+                        "imageMode": {
+                          "imageTopic": "/camera/camera_2/image"
+                        }
+                      },
+                      "title": "LIVE \u2014 icSpring camera 2",
+                      "version": 1
+                    }
+                  },
+                  {
+                    "proportion": 1,
+                    "content": {
+                      "type": "panel",
+                      "panelType": "Image",
+                      "config": {
+                        "imageMode": {
+                          "imageTopic": "/camera/realsense/image"
+                        }
+                      },
+                      "title": "LIVE \u2014 D435i color",
+                      "version": 1
+                    }
+                  }
+                ]
+              }
+            }
+          ]
+        }
+      },
+      {
+        "proportion": 1,
+        "content": {
+          "type": "split",
+          "direction": "row",
+          "items": [
+            {
+              "proportion": 1,
+              "content": {
+                "type": "panel",
+                "panelType": "Plot",
+                "config": {
+                  "paths": [
+                    {
+                      "enabled": true,
+                      "label": "shoulder_pan",
+                      "value": "/simulation/joints.measured.shoulder_pan"
+                    },
+                    {
+                      "enabled": true,
+                      "label": "shoulder_lift",
+                      "value": "/simulation/joints.measured.shoulder_lift"
+                    },
+                    {
+                      "enabled": true,
+                      "label": "elbow_flex",
+                      "value": "/simulation/joints.measured.elbow_flex"
+                    },
+                    {
+                      "enabled": true,
+                      "label": "wrist_flex",
+                      "value": "/simulation/joints.measured.wrist_flex"
+                    },
+                    {
+                      "enabled": true,
+                      "label": "wrist_roll",
+                      "value": "/simulation/joints.measured.wrist_roll"
+                    },
+                    {
+                      "enabled": true,
+                      "label": "gripper",
+                      "value": "/simulation/joints.measured.gripper"
+                    }
+                  ],
+                  "showLegend": true,
+                  "followingViewWidth": 20
+                },
+                "title": "SIMULATED joint positions \u2014 degrees / gripper %",
+                "version": 1
+              }
+            },
+            {
+              "proportion": 1,
+              "content": {
+                "type": "tabs",
+                "selectedTabIndex": 0,
+                "tabs": [
+                  {
+                    "title": "Computer vision",
+                    "content": {
+                      "type": "panel",
+                      "panelType": "Image",
+                      "config": {
+                        "imageMode": {
+                          "imageTopic": "/camera/obsbot_cv/image"
+                        }
+                      },
+                      "title": "OBSBOT motor tags \u2014 green; projection uncalibrated",
+                      "version": 1
+                    }
+                  },
+                  {
+                    "title": "Encoder freshness",
+                    "content": {
+                      "type": "panel",
+                      "panelType": "RawMessages",
+                      "config": {
+                        "defaultExpanded": true,
+                        "topicPath": "/robot/encoder/status"
+                      },
+                      "title": "Encoder freshness",
+                      "version": 1
+                    }
+                  },
+                  {
+                    "title": "MCAP episodes",
+                    "content": {
+                      "type": "panel",
+                      "panelType": "RawMessages",
+                      "config": {
+                        "defaultExpanded": true,
+                        "topicPath": "/recording/episodes"
+                      },
+                      "title": "MCAP episodes",
+                      "version": 1
+                    }
+                  },
+                  {
+                    "title": "Simulation status",
+                    "content": {
+                      "type": "panel",
+                      "panelType": "RawMessages",
+                      "config": {
+                        "defaultExpanded": true,
+                        "topicPath": "/simulation/status"
+                      },
+                      "title": "Simulation status",
+                      "version": 1
+                    }
+                  },
+                  {
+                    "title": "OBSBOT status",
+                    "content": {
+                      "type": "panel",
+                      "panelType": "RawMessages",
+                      "config": {
+                        "defaultExpanded": true,
+                        "topicPath": "/camera/obsbot/status"
+                      },
+                      "title": "OBSBOT status",
+                      "version": 1
+                    }
+                  },
+                  {
+                    "title": "Camera 1 status",
+                    "content": {
+                      "type": "panel",
+                      "panelType": "RawMessages",
+                      "config": {
+                        "defaultExpanded": true,
+                        "topicPath": "/camera/camera_1/status"
+                      },
+                      "title": "Camera 1 status",
+                      "version": 1
+                    }
+                  },
+                  {
+                    "title": "Camera 2 status",
+                    "content": {
+                      "type": "panel",
+                      "panelType": "RawMessages",
+                      "config": {
+                        "defaultExpanded": true,
+                        "topicPath": "/camera/camera_2/status"
+                      },
+                      "title": "Camera 2 status",
+                      "version": 1
+                    }
+                  },
+                  {
+                    "title": "Saved calibration",
+                    "content": {
+                      "type": "panel",
+                      "panelType": "RawMessages",
+                      "config": {
+                        "defaultExpanded": true,
+                        "topicPath": "/calibration/installed"
+                      },
+                      "title": "Saved calibration",
+                      "version": 1
+                    }
+                  },
+                  {
+                    "title": "Saved folded pose",
+                    "content": {
+                      "type": "panel",
+                      "panelType": "RawMessages",
+                      "config": {
+                        "defaultExpanded": true,
+                        "topicPath": "/calibration/rest_pose"
+                      },
+                      "title": "Saved folded pose",
+                      "version": 1
+                    }
+                  },
+                  {
+                    "title": "Saved reference attempt",
+                    "content": {
+                      "type": "panel",
+                      "panelType": "RawMessages",
+                      "config": {
+                        "defaultExpanded": true,
+                        "topicPath": "/calibration/shoulder_reference"
+                      },
+                      "title": "Saved reference attempt",
+                      "version": 1
+                    }
+                  }
+                ]
+              }
+            }
+          ]
+        }
+      }
+    ]
+  }
+}

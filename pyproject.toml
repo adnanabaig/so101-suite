@@ -1,0 +1,137 @@
+[project]
+name = "so101"
+version = "0.2.2rc5"
+description = "SO-101 robotics workstation: safe operation, teleop, data, learning, simulation, diagnostics, XR/hand intent, and bounded agents."
+readme = "README.md"
+# LeRobot 0.6.1 needs 3.12 or newer; pyrealsense2 2.56 (the realsense extra) has
+# no cp314 wheels, so 3.14 is out until that pin moves. Keep in step with
+# scripts/check_dist.py, so101.platform_info, bring-up preflight, the Makefile
+# and the installers.
+requires-python = ">=3.12,<3.14"
+license = { text = "MIT" }
+authors = [{ name = "SO-101 Platform" }]
+
+dependencies = [
+    "fastapi>=0.110,<1",
+    "uvicorn[standard]>=0.29,<1",
+    "pydantic>=2.6,<3",
+    "pydantic-settings>=2.2,<3",
+    "typer>=0.12,<1",
+    "rich>=13.7,<15",
+    "PyYAML>=6.0,<7",
+    "numpy>=1.24,<3",
+    "websockets>=12.0,<16",
+    "python-multipart>=0.0.9,<1",
+    "httpx>=0.27,<1",
+    "mcap>=1.3,<2",
+]
+
+[project.optional-dependencies]
+# Real hardware + LeRobot. Installed on the robot host.
+robot = [
+    # Pin the tested API contract; LeRobot's hardware/dataset APIs move quickly.
+    "lerobot[dataset,feetech]==0.6.1",
+    # cameras.py imports cv2 directly. Use LeRobot 0.6.1's own distribution and
+    # range: adding opencv-python as well installs a second wheel into the same
+    # cv2/ package, resolved one major version past LeRobot's tested range.
+    "opencv-python-headless>=4.9,<4.14",
+    "feetech-servo-sdk>=1.0.0,<2.0.0",  # STS3215 SDK (scservo_sdk)
+    "pyserial>=3.5,<4",
+]
+# Training stack.
+train = [
+    "lerobot[diffusion,pi,smolvla,training]==0.6.1",
+    "torch>=2.2,<2.12",
+    "wandb>=0.16,<1",
+    "tensorboard>=2.16,<3",
+]
+# MuJoCo physics simulation: `so101 sim ...` and SO101_SIM_ENGINE=mujoco. The model
+# assets ship inside the wheel. Renders are PNG; installing Pillow adds JPEG.
+sim = [
+    "mujoco>=3.3,<4",
+]
+# Intel RealSense depth cameras (SO101_CAMERAS=realsense:<serial>, docs/realsense.md).
+# Same distributions as LeRobot 0.6.1's intelrealsense extra; the macOS build
+# is a separate community package.
+realsense = [
+    "pyrealsense2>=2.56.4,<2.57.0 ; sys_platform != 'darwin'",
+    "pyrealsense2-macosx>=2.54.2,<2.57.0 ; sys_platform == 'darwin'",
+]
+dev = [
+    "pytest>=8.0,<10",
+    "pytest-asyncio>=0.23,<2",
+    # pytest-cov 7 needs coverage>=7.10, whose JSON report has the per-function
+    # regions scripts/check_coverage.py reads.
+    "pytest-cov>=7.0,<8",
+    "httpx2>=2.13,<3",
+    # Lint and type-check versions are bounded so a new release cannot change
+    # the gate under an unrelated change. Bump deliberately.
+    "ruff>=0.16.9,<0.17",
+    "mypy>=2.3,<2.4",
+    "build>=1.2,<2",  # make wheel / the CI wheel job
+    # The build backend, for tests/test_hatch_build.py and mypy on hatch_build.py
+    # (python -m build fetches its own copy).
+    "hatchling>=1.32,<2",
+    "opencv-python-headless>=4.9,<4.14",
+]
+
+[project.scripts]
+so101 = "so101.cli:app"
+# Starts the server from the per-user data folder and opens the browser.
+so101-suite = "so101.launcher:main"
+
+[build-system]
+requires = ["hatchling>=1.32,<2"]
+build-backend = "hatchling.build"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/so101"]
+
+[tool.hatch.build.targets.sdist]
+# The package source only: no tests/, docs/, scripts/ or frontend sources.
+# Hatchling adds pyproject.toml, hatch_build.py, README.md and LICENSE itself.
+only-include = ["src/so101"]
+
+# hatch_build.py: bundles the built UI (frontend/dist) into the wheel as so101/web
+# and into the sdist as frontend/dist. Without a UI build it warns and builds a
+# UI-less package; SO101_REQUIRE_UI=1 turns that into an error.
+[tool.hatch.build.hooks.custom]
+
+[tool.ruff]
+line-length = 100
+# The oldest Python requires-python (>=3.12,<3.14) allows; [tool.mypy] python_version too.
+target-version = "py312"
+src = ["src", "tests"]
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "UP", "B", "W"]
+ignore = [
+    "B008",   # FastAPI Depends() in defaults is idiomatic
+    # pyupgrade rules that the py312 target newly enables. Wave-1 streams are
+    # editing these files in parallel, so a rewrite now would conflict with all
+    # of them; each entry is deferred to the post-merge codemod.
+    "UP017",  # datetime.timezone.utc -> datetime.UTC; deferred to the post-merge codemod
+    "UP042",  # (str, Enum) -> enum.StrEnum; deferred to the post-merge codemod
+    "UP040",  # TypeAlias -> PEP 695 `type` statement; deferred to the post-merge codemod
+    "UP046",  # Generic[T] classes -> PEP 695 class syntax; deferred to the post-merge codemod
+    "UP047",  # TypeVar functions -> PEP 695 function syntax; deferred to the post-merge codemod
+]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+asyncio_mode = "auto"
+addopts = "-q"
+
+# `make coverage` / CI: pytest --cov, then scripts/check_coverage.py enforces
+# coverage-floors.toml against coverage.json.
+[tool.coverage.run]
+source = ["so101"]
+branch = true
+
+[tool.coverage.report]
+precision = 2
+skip_empty = true
+
+[tool.mypy]
+python_version = "3.12"
+ignore_missing_imports = true

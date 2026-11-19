@@ -1,0 +1,12 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+<title>SO101 phone target</title><style>
+*{box-sizing:border-box}html,body{margin:0;width:100%;min-height:100%;background:white;color:black;font:16px system-ui;text-align:center}main{padding:24px 0;overflow:hidden}h1{font-size:20px;margin:0 0 18px}#target{display:block;width:340px;height:340px;max-width:none;margin:40px auto;image-rendering:pixelated}p{padding:0 24px;line-height:1.4}#state{color:#17472d}.bad #state{color:#a00}#details{font-size:12px;overflow-wrap:anywhere}
+</style></head><body class="bad"><main><h1>SO101 · TOP ↑</h1>
+<p>Place phone face-up in the workstation’s camera view. Leave this page open.</p>
+<img id="target" src="data:image/png;base64,__MARKER__" alt="ArUco calibration target 42">
+<p id="state" role="status">Target visible · Checking automatic size…</p><p id="details"></p><p>iPhone 14 Pro Max · Portrait · 100% page zoom<br>Keep display awake and avoid reflections.</p>
+</main><script>
+const key='__KEY__',target=document.getElementById('target'),state=document.getElementById('state');
+async function report(){try{const data={screen_width:screen.width,screen_height:screen.height,dpr:devicePixelRatio,scale:visualViewport?visualViewport.scale:1,viewport_width:innerWidth,marker_css_width:target.getBoundingClientRect().width};document.getElementById('details').textContent='Display '+data.screen_width+' × '+data.screen_height+' · DPR '+data.dpr+' · Zoom '+data.scale;const response=await fetch('/display',{method:'POST',headers:{'Content-Type':'application/json','X-Target-Key':key},body:JSON.stringify(data)});const result=await response.json();if(!response.ok)throw Error(result.error);document.body.classList.remove('bad');state.textContent='Target ready · '+result.width_mm.toFixed(1)+' mm · Size sent automatically'}catch(error){document.body.classList.add('bad');state.textContent='Target preview visible; automatic sizing is not confirmed. '+error.message}finally{setTimeout(report,1500)}}report();
+</script></body></html>

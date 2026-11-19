@@ -1,0 +1,18 @@
+#!/usr/bin/env bash
+set -euo pipefail
+suite_root="$(cd -- "$(dirname -- "$(readlink -f -- "$0")")" && pwd)"
+if [[ $# -eq 0 ]]; then
+    exec "$suite_root/.venv/bin/python" -I "$suite_root/scripts/suite_session.py" --open
+fi
+case "$1" in
+    session)
+        shift
+        exec "$suite_root/.venv/bin/python" -I "$suite_root/scripts/suite_session.py" "$@"
+        ;;
+    up|restart|status|down)
+        exec "$suite_root/services" "$@"
+        ;;
+    *)
+        exec "$suite_root/.venv/bin/so101" "$@"
+        ;;
+esac

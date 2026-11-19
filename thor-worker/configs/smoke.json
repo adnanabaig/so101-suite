@@ -1,0 +1,57 @@
+{
+  "benchmark_id": "qualification-smoke-v1",
+  "comparison": {
+    "absolute_tolerance": 0.00001,
+    "minimum_throughput_ratio": 1.5,
+    "relative_tolerance": 0.0001
+  },
+  "schema_version": 1,
+  "seed": 101,
+  "workloads": [
+    {
+      "enabled": true,
+      "name": "dataset",
+      "parameters": {
+        "artifact_path": null,
+        "bytes_per_iteration": 1048576,
+        "iterations": 4,
+        "manifest_sha256": null,
+        "mode": "synthetic"
+      }
+    },
+    {
+      "enabled": true,
+      "name": "torch",
+      "parameters": {
+        "device": "cuda",
+        "iterations": 10,
+        "matrix_size": 512,
+        "precision": "float32",
+        "warmup": 2
+      }
+    },
+    {
+      "enabled": true,
+      "name": "inference",
+      "parameters": {
+        "batch_size": 1,
+        "device": "cuda",
+        "hidden_features": 512,
+        "input_features": 256,
+        "iterations": 50,
+        "output_features": 6,
+        "policy": "synthetic_mlp_v1",
+        "precision": "float32",
+        "warmup": 5
+      }
+    },
+    {
+      "enabled": true,
+      "name": "sim",
+      "parameters": {
+        "model": "synthetic_pendulum_v1",
+        "steps": 10000
+      }
+    }
+  ]
+}

@@ -1,0 +1,170 @@
+@import "tailwindcss" source(none);
+@import "./styles/palette.css";
+
+/* The files Tailwind scans for class names (v3's `content`). */
+@source "../index.html";
+@source "./**/*.{ts,tsx}";
+
+@theme {
+  /* v3's breakpoints, in px. */
+  --breakpoint-sm: 640px;
+  --breakpoint-md: 768px;
+  --breakpoint-lg: 1024px;
+  --breakpoint-xl: 1280px;
+  --breakpoint-2xl: 1536px;
+
+  --color-accent: #22d3ee;
+  --color-accent-emerald: #34d399;
+  /*
+   * Secondary text. Tailwind's slate-500 is 4.24:1 on slate-950 and 3.07:1 on
+   * slate-800; this keeps at least 4.86:1 on slate-800, 900 and 950. Use
+   * text-muted, never text-slate-500/600, for words people must read.
+   */
+  --color-muted: #8796ab;
+
+  /* v3's sans stack; v4.3's default drops system-ui for a named-font list. */
+  --font-sans:
+    ui-sans-serif, system-ui, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol",
+    "Noto Color Emoji";
+  --font-mono: ui-monospace, SFMono-Regular, Menlo, monospace;
+}
+
+/*
+ * v3 defaults that v4 changed, kept so nothing looks or behaves differently:
+ * the default border colour (v4: currentColor), the placeholder colour (v4:
+ * half the text colour) and the pointer cursor on buttons (v4: default).
+ */
+@layer base {
+  *,
+  ::after,
+  ::before,
+  ::backdrop,
+  ::file-selector-button {
+    border-color: var(--color-gray-200, currentcolor);
+  }
+
+  input::placeholder,
+  textarea::placeholder {
+    color: var(--color-gray-400);
+  }
+
+  button:not(:disabled),
+  [role="button"]:not(:disabled) {
+    cursor: pointer;
+  }
+
+  /*
+   * v4's preflight also clears the browser's background and corner radius on
+   * inputs, selects, textareas and optgroups, and the padding of options; v3
+   * left those to the browser (range inputs and select popups show it).
+   */
+  input:where(:not([type="button"], [type="reset"], [type="submit"])),
+  select,
+  textarea,
+  optgroup {
+    background-color: revert;
+    border-radius: revert;
+  }
+
+  option {
+    padding: revert;
+  }
+
+  /*
+   * v4's transition and transition-colors also animate outline-color, so the
+   * focus outline below would fade in from the text colour. With the outline
+   * colour already cyan, focus only switches the outline on, as in v3.
+   */
+  *,
+  ::after,
+  ::before {
+    outline-color: var(--color-cyan-300);
+  }
+}
+
+@layer base {
+  html,
+  body,
+  #root {
+    height: 100%;
+  }
+
+  body {
+    @apply bg-slate-950 text-slate-100 antialiased;
+    color-scheme: dark;
+    font-family:
+      Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
+      sans-serif;
+    text-rendering: optimizeLegibility;
+  }
+
+  ::selection {
+    @apply bg-cyan-400/25 text-cyan-50;
+  }
+
+  button,
+  a,
+  input,
+  select,
+  textarea {
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  /*
+   * Keyboard focus is always visible. Components may restyle it (a ring, a
+   * border) but never remove it; only programmatic focus targets such as
+   * <main> and a heading that receives focus opt out with outline-none.
+   */
+  :focus-visible {
+    outline: 2px solid var(--color-cyan-300);
+    outline-offset: 2px;
+  }
+}
+
+.workstation-grid {
+  background-image:
+    radial-gradient(circle at 18% -15%, rgba(8, 145, 178, 0.12), transparent 31rem),
+    radial-gradient(circle at 94% 5%, rgba(37, 99, 235, 0.07), transparent 28rem),
+    linear-gradient(rgba(148, 163, 184, 0.018) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(148, 163, 184, 0.018) 1px, transparent 1px);
+  background-size: auto, auto, 32px 32px, 32px 32px;
+}
+
+/* Thin scrollbars for log/console panels */
+.scroll-thin::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+.scroll-thin::-webkit-scrollbar-thumb {
+  @apply bg-slate-700 rounded-sm;
+}
+.scroll-thin::-webkit-scrollbar-track {
+  @apply bg-transparent;
+}
+
+* {
+  scrollbar-color: rgb(51 65 85) transparent;
+  scrollbar-width: thin;
+}
+
+input[type="range"] {
+  height: 4px;
+}
+
+/*
+ * Reduced motion: animations and transitions end at once. The one exemption
+ * is [data-essential-motion], motion that carries information with no other
+ * visual form: the hold-to-confirm fill shows how long is left to hold, and
+ * without its transition it would read as complete the moment a press began.
+ * Spinners and pings use Tailwind's motion-safe: variant on top of this.
+ */
+@media (prefers-reduced-motion: reduce) {
+  *:not([data-essential-motion]),
+  *::before,
+  *::after {
+    scroll-behavior: auto !important;
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}

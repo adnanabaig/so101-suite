@@ -1,0 +1,15 @@
+# Frontend dev image (Vite dev server). For production, build and let the API
+# serve frontend/dist statically instead.
+#
+# Runs as the image's unprivileged `node` user (uid/gid 1000). It owns /app, so
+# npm ci and Vite's dependency cache (node_modules/.vite) can write there.
+# Unverified: Docker was not available when this was changed (audit B18).
+FROM node:24-slim
+WORKDIR /app
+RUN chown node:node /app
+USER 1000:1000
+COPY --chown=node:node package*.json ./
+RUN npm ci
+COPY --chown=node:node . .
+EXPOSE 5173
+CMD ["npm", "run", "dev", "--", "--host", "0.0.0.0"]

@@ -1,0 +1,4 @@
+#!/usr/bin/env bash
+set -euo pipefail
+suite_root="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd)"
+exec "$suite_root/.venv/bin/python" -I "$suite_root/scripts/service_suite.py" "$@"

@@ -1,0 +1,82 @@
+{
+  "name": "SO101 Arms",
+  "current_scene": "Arms live",
+  "current_program_scene": "Arms live",
+  "scene_order": [
+    {
+      "name": "Arms live"
+    }
+  ],
+  "sources": [
+    {
+      "name": "OBSBOT local feed",
+      "uuid": "6b2c9ebf-67e5-4678-806e-b394ace489a1",
+      "id": "ffmpeg_source",
+      "versioned_id": "ffmpeg_source",
+      "settings": {
+        "is_local_file": false,
+        "input": "http://127.0.0.1:8765/stream.mjpg",
+        "input_format": "mjpeg",
+        "buffering_mb": 1,
+        "reconnect_delay_sec": 2,
+        "restart_on_activate": false,
+        "close_when_inactive": false,
+        "clear_on_media_end": true,
+        "hw_decode": false
+      },
+      "volume": 0.0,
+      "muted": true,
+      "enabled": true,
+      "mixers": 0,
+      "sync": 0,
+      "flags": 0
+    },
+    {
+      "name": "Arms live",
+      "uuid": "a5aa68db-1d74-45bb-8415-71d3a3f04f78",
+      "id": "scene",
+      "versioned_id": "scene",
+      "settings": {
+        "id_counter": 1,
+        "items": [
+          {
+            "name": "OBSBOT local feed",
+            "source_uuid": "6b2c9ebf-67e5-4678-806e-b394ace489a1",
+            "id": 1,
+            "visible": true,
+            "locked": true,
+            "rot": 0.0,
+            "pos": {
+              "x": 0.0,
+              "y": 0.0
+            },
+            "scale": {
+              "x": 1.0,
+              "y": 1.0
+            },
+            "align": 5,
+            "bounds_type": 0,
+            "bounds_align": 0,
+            "bounds": {
+              "x": 0.0,
+              "y": 0.0
+            },
+            "crop_left": 0,
+            "crop_top": 0,
+            "crop_right": 0,
+            "crop_bottom": 0
+          }
+        ]
+      }
+    }
+  ],
+  "DesktopAudioDevice1": null,
+  "DesktopAudioDevice2": null,
+  "AuxAudioDevice1": null,
+  "AuxAudioDevice2": null,
+  "AuxAudioDevice3": null,
+  "AuxAudioDevice4": null,
+  "current_transition": "Fade",
+  "transition_duration": 300,
+  "transitions": []
+}

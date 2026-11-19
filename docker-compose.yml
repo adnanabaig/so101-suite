@@ -1,0 +1,58 @@
+# Mock-hardware stack for software development: `make docker`.
+#
+# Real hardware runs on the host, not in Docker: `make api`, `make suite` or
+# `so101 serve` (docs/hardware-setup.md). Docker Desktop on macOS cannot pass
+# USB serial devices through, and these images do not install the [robot] extra.
+#
+# The containers run as uid 1000 and report their health from /api/health; the
+# UI starts once the API is healthy. `make docker` creates ./data, ./datasets
+# and ./outputs first, so that Docker does not create the bind mounts as root.
+# On Linux the containers write them as uid 1000.
+#
+# Unverified: Docker was not available when the health checks, the non-root
+# user and this note were added (audit B18).
+services:
+  suite:
+    profiles: ["standalone"]
+    build:
+      context: .
+      dockerfile: docker/Dockerfile.suite
+    environment:
+      - SO101_MOCK=${SO101_MOCK:-1}
+      - SO101_CORS_ORIGINS=${SO101_CORS_ORIGINS:-http://localhost:8080}
+    ports:
+      - "127.0.0.1:8080:8000"
+    volumes:
+      - ./data:/app/data
+      - ./datasets:/app/datasets
+      - ./outputs:/app/outputs
+
+  api:
+    build:
+      context: .
+      dockerfile: docker/Dockerfile.api
+    environment:
+      - SO101_MOCK=${SO101_MOCK:-1}
+      - SO101_HOST=0.0.0.0
+      - SO101_PORT=8000
+      # The ui container's Vite proxy reaches us as Host "api" (C1 Host guard,
+      # docs/control-plane-security.md).
+      - SO101_ALLOWED_HOSTS=api
+    ports:
+      - "127.0.0.1:8000:8000"
+    volumes:
+      - ./data:/app/data
+      - ./datasets:/app/datasets
+      - ./outputs:/app/outputs
+
+  ui:
+    build:
+      context: ./frontend
+      dockerfile: ../docker/Dockerfile.ui
+    environment:
+      - VITE_DEV_API_TARGET=http://api:8000
+    ports:
+      - "127.0.0.1:5173:5173"
+    depends_on:
+      api:
+        condition: service_healthy

@@ -1,0 +1,1046 @@
+{
+  "model": {
+    "name": "so101",
+    "source": {
+      "repo": "https://github.com/google-deepmind/mujoco_menagerie",
+      "path": "robotstudio_so101",
+      "commit": "4d038b3feae26ec82b46a4d586379114012a8ac7",
+      "license": "Apache-2.0"
+    },
+    "units": {
+      "length": "m",
+      "angle": "rad"
+    },
+    "up_axis": "z",
+    "bodies": [
+      {
+        "name": "base",
+        "parent": null,
+        "pos": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "quat": [
+          1.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        "joint": null,
+        "geoms": [
+          {
+            "kind": "mesh",
+            "mesh": "base_motor_holder_so101_v1",
+            "pos": [
+              -0.006365,
+              -9.9e-05,
+              -0.0024
+            ],
+            "quat": [
+              0.5,
+              0.5,
+              0.5,
+              0.5
+            ],
+            "rgba": [
+              1.0,
+              0.82,
+              0.12,
+              1.0
+            ]
+          },
+          {
+            "kind": "mesh",
+            "mesh": "base_so101_v2",
+            "pos": [
+              -0.006365,
+              0.0,
+              -0.0024
+            ],
+            "quat": [
+              0.5,
+              0.5,
+              0.5,
+              0.5
+            ],
+            "rgba": [
+              1.0,
+              0.82,
+              0.12,
+              1.0
+            ]
+          },
+          {
+            "kind": "mesh",
+            "mesh": "sts3215_03a_v1",
+            "pos": [
+              0.0263353,
+              0.0,
+              0.0437
+            ],
+            "quat": [
+              1.0,
+              0.0,
+              0.0,
+              0.0
+            ],
+            "rgba": [
+              0.1,
+              0.1,
+              0.1,
+              1.0
+            ]
+          },
+          {
+            "kind": "mesh",
+            "mesh": "waveshare_mounting_plate_so101_v2",
+            "pos": [
+              -0.0309827,
+              -0.000199,
+              0.0474
+            ],
+            "quat": [
+              0.5,
+              0.5,
+              0.5,
+              0.5
+            ],
+            "rgba": [
+              1.0,
+              0.82,
+              0.12,
+              1.0
+            ]
+          }
+        ]
+      },
+      {
+        "name": "shoulder",
+        "parent": "base",
+        "pos": [
+          0.0388353,
+          0.0,
+          0.0624
+        ],
+        "quat": [
+          0.0,
+          0.0,
+          -1.0,
+          0.0
+        ],
+        "joint": {
+          "name": "shoulder_pan",
+          "axis": [
+            0.0,
+            0.0,
+            1.0
+          ],
+          "range": [
+            -1.91986,
+            1.91986
+          ]
+        },
+        "geoms": [
+          {
+            "kind": "mesh",
+            "mesh": "sts3215_03a_v1",
+            "pos": [
+              -0.030399,
+              0.000422,
+              -0.0417
+            ],
+            "quat": [
+              0.5,
+              0.5,
+              0.5,
+              -0.5
+            ],
+            "rgba": [
+              0.1,
+              0.1,
+              0.1,
+              1.0
+            ]
+          },
+          {
+            "kind": "mesh",
+            "mesh": "motor_holder_so101_base_v1",
+            "pos": [
+              -0.067599,
+              -0.0001778,
+              0.01585
+            ],
+            "quat": [
+              0.5,
+              0.5,
+              -0.5,
+              0.5
+            ],
+            "rgba": [
+              1.0,
+              0.82,
+              0.12,
+              1.0
+            ]
+          },
+          {
+            "kind": "mesh",
+            "mesh": "rotation_pitch_so101_v1",
+            "pos": [
+              0.012201,
+              2.2e-05,
+              0.0464
+            ],
+            "quat": [
+              0.7071067811865475,
+              -0.7071067811865475,
+              0.0,
+              0.0
+            ],
+            "rgba": [
+              1.0,
+              0.82,
+              0.12,
+              1.0
+            ]
+          }
+        ]
+      },
+      {
+        "name": "upper_arm",
+        "parent": "shoulder",
+        "pos": [
+          -0.0303992,
+          -0.0182778,
+          -0.0542
+        ],
+        "quat": [
+          0.5,
+          -0.5,
+          -0.5,
+          -0.5
+        ],
+        "joint": {
+          "name": "shoulder_lift",
+          "axis": [
+            0.0,
+            0.0,
+            1.0
+          ],
+          "range": [
+            -1.7453293,
+            1.7453293
+          ]
+        },
+        "geoms": [
+          {
+            "kind": "mesh",
+            "mesh": "sts3215_03a_v1",
+            "pos": [
+              -0.11257,
+              -0.0155,
+              0.0187
+            ],
+            "quat": [
+              0.0,
+              -0.7071067811865475,
+              0.7071067811865475,
+              0.0
+            ],
+            "rgba": [
+              0.1,
+              0.1,
+              0.1,
+              1.0
+            ]
+          },
+          {
+            "kind": "mesh",
+            "mesh": "upper_arm_so101_v1",
+            "pos": [
+              -0.065085,
+              0.012,
+              0.0182
+            ],
+            "quat": [
+              0.0,
+              1.0,
+              0.0,
+              0.0
+            ],
+            "rgba": [
+              1.0,
+              0.82,
+              0.12,
+              1.0
+            ]
+          }
+        ]
+      },
+      {
+        "name": "lower_arm",
+        "parent": "upper_arm",
+        "pos": [
+          -0.11257,
+          -0.028,
+          0.0
+        ],
+        "quat": [
+          0.7071067811865475,
+          0.0,
+          0.0,
+          0.7071067811865475
+        ],
+        "joint": {
+          "name": "elbow_flex",
+          "axis": [
+            0.0,
+            0.0,
+            1.0
+          ],
+          "range": [
+            -1.69,
+            1.69
+          ]
+        },
+        "geoms": [
+          {
+            "kind": "mesh",
+            "mesh": "under_arm_so101_v1",
+            "pos": [
+              -0.06485,
+              -0.032,
+              0.0182
+            ],
+            "quat": [
+              0.0,
+              1.0,
+              0.0,
+              0.0
+            ],
+            "rgba": [
+              1.0,
+              0.82,
+              0.12,
+              1.0
+            ]
+          },
+          {
+            "kind": "mesh",
+            "mesh": "motor_holder_so101_wrist_v1",
+            "pos": [
+              -0.06485,
+              -0.032,
+              0.018
+            ],
+            "quat": [
+              0.0,
+              -1.0,
+              0.0,
+              0.0
+            ],
+            "rgba": [
+              1.0,
+              0.82,
+              0.12,
+              1.0
+            ]
+          },
+          {
+            "kind": "mesh",
+            "mesh": "sts3215_03a_v1",
+            "pos": [
+              -0.1224,
+              0.0052,
+              0.0187
+            ],
+            "quat": [
+              0.0,
+              0.0,
+              1.0,
+              0.0
+            ],
+            "rgba": [
+              0.1,
+              0.1,
+              0.1,
+              1.0
+            ]
+          }
+        ]
+      },
+      {
+        "name": "wrist",
+        "parent": "lower_arm",
+        "pos": [
+          -0.1349,
+          0.0052,
+          0.0
+        ],
+        "quat": [
+          0.7071067811865475,
+          0.0,
+          0.0,
+          -0.7071067811865475
+        ],
+        "joint": {
+          "name": "wrist_flex",
+          "axis": [
+            0.0,
+            0.0,
+            1.0
+          ],
+          "range": [
+            -1.658063,
+            1.658063
+          ]
+        },
+        "geoms": [
+          {
+            "kind": "mesh",
+            "mesh": "sts3215_03a_no_horn_v1",
+            "pos": [
+              0.0,
+              -0.0424,
+              0.0306
+            ],
+            "quat": [
+              0.5,
+              0.5,
+              0.5,
+              -0.5
+            ],
+            "rgba": [
+              0.1,
+              0.1,
+              0.1,
+              1.0
+            ]
+          },
+          {
+            "kind": "mesh",
+            "mesh": "wrist_roll_pitch_so101_v2",
+            "pos": [
+              0.0,
+              -0.028,
+              0.0181
+            ],
+            "quat": [
+              0.5,
+              -0.5,
+              -0.5,
+              -0.5
+            ],
+            "rgba": [
+              1.0,
+              0.82,
+              0.12,
+              1.0
+            ]
+          }
+        ]
+      },
+      {
+        "name": "gripper",
+        "parent": "wrist",
+        "pos": [
+          5.55112e-17,
+          -0.0611,
+          0.0181
+        ],
+        "quat": [
+          0.017209108230571014,
+          -0.017209108230571014,
+          0.7068973380865913,
+          0.7068973380865913
+        ],
+        "joint": {
+          "name": "wrist_roll",
+          "axis": [
+            0.0,
+            0.0,
+            1.0
+          ],
+          "range": [
+            -2.7438473,
+            2.8412063
+          ]
+        },
+        "geoms": [
+          {
+            "kind": "mesh",
+            "mesh": "sts3215_03a_v1",
+            "pos": [
+              0.0077,
+              0.0001,
+              -0.0234
+            ],
+            "quat": [
+              0.7071067811865475,
+              -0.7071067811865475,
+              0.0,
+              0.0
+            ],
+            "rgba": [
+              0.1,
+              0.1,
+              0.1,
+              1.0
+            ]
+          },
+          {
+            "kind": "mesh",
+            "mesh": "wrist_roll_follower_so101_v1",
+            "pos": [
+              0.0,
+              -0.000218,
+              0.00095
+            ],
+            "quat": [
+              0.0,
+              1.0,
+              0.0,
+              0.0
+            ],
+            "rgba": [
+              1.0,
+              0.82,
+              0.12,
+              1.0
+            ]
+          }
+        ]
+      },
+      {
+        "name": "camera_mount",
+        "parent": "gripper",
+        "pos": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "quat": [
+          1.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        "joint": null,
+        "geoms": [
+          {
+            "kind": "mesh",
+            "mesh": "wrist_roll_follower_so101_camera_mount",
+            "pos": [
+              0.0,
+              -0.000218,
+              0.00095
+            ],
+            "quat": [
+              0.0,
+              1.0,
+              0.0,
+              0.0
+            ],
+            "rgba": [
+              1.0,
+              0.82,
+              0.12,
+              1.0
+            ]
+          },
+          {
+            "kind": "box",
+            "size": [
+              0.019,
+              0.019,
+              0.0005
+            ],
+            "pos": [
+              -0.00101,
+              0.05958,
+              -0.04515
+            ],
+            "quat": [
+              0.9582796540567952,
+              -0.2857918968278578,
+              -0.0015559994382773024,
+              0.004546998358513427
+            ],
+            "rgba": [
+              0.1,
+              0.1,
+              0.1,
+              1.0
+            ]
+          },
+          {
+            "kind": "cylinder",
+            "size": [
+              0.007,
+              0.00475
+            ],
+            "pos": [
+              -0.00298,
+              0.05669,
+              -0.04954
+            ],
+            "quat": [
+              0.9582796540567952,
+              -0.2857918968278578,
+              -0.0015559994382773024,
+              0.004546998358513427
+            ],
+            "rgba": [
+              0.1,
+              0.1,
+              0.1,
+              1.0
+            ]
+          }
+        ]
+      },
+      {
+        "name": "moving_jaw_so101_v1",
+        "parent": "gripper",
+        "pos": [
+          0.0202,
+          0.0188,
+          -0.0234
+        ],
+        "quat": [
+          0.7071067811865475,
+          0.7071067811865475,
+          0.0,
+          0.0
+        ],
+        "joint": {
+          "name": "gripper",
+          "axis": [
+            0.0,
+            0.0,
+            1.0
+          ],
+          "range": [
+            -0.174533,
+            1.7453292
+          ]
+        },
+        "geoms": [
+          {
+            "kind": "mesh",
+            "mesh": "moving_jaw_so101_v1",
+            "pos": [
+              0.0,
+              0.0,
+              0.0189
+            ],
+            "quat": [
+              1.0,
+              0.0,
+              0.0,
+              0.0
+            ],
+            "rgba": [
+              1.0,
+              0.82,
+              0.12,
+              1.0
+            ]
+          }
+        ]
+      }
+    ],
+    "meshes": {
+      "base_motor_holder_so101_v1": "/api/simulation/assets/base_motor_holder_so101_v1.stl",
+      "base_so101_v2": "/api/simulation/assets/base_so101_v2.stl",
+      "motor_holder_so101_base_v1": "/api/simulation/assets/motor_holder_so101_base_v1.stl",
+      "motor_holder_so101_wrist_v1": "/api/simulation/assets/motor_holder_so101_wrist_v1.stl",
+      "moving_jaw_so101_v1": "/api/simulation/assets/moving_jaw_so101_v1.stl",
+      "rotation_pitch_so101_v1": "/api/simulation/assets/rotation_pitch_so101_v1.stl",
+      "sts3215_03a_no_horn_v1": "/api/simulation/assets/sts3215_03a_no_horn_v1.stl",
+      "sts3215_03a_v1": "/api/simulation/assets/sts3215_03a_v1.stl",
+      "under_arm_so101_v1": "/api/simulation/assets/under_arm_so101_v1.stl",
+      "upper_arm_so101_v1": "/api/simulation/assets/upper_arm_so101_v1.stl",
+      "waveshare_mounting_plate_so101_v2": "/api/simulation/assets/waveshare_mounting_plate_so101_v2.stl",
+      "wrist_roll_follower_so101_camera_mount": "/api/simulation/assets/wrist_roll_follower_so101_camera_mount.stl",
+      "wrist_roll_follower_so101_v1": "/api/simulation/assets/wrist_roll_follower_so101_v1.stl",
+      "wrist_roll_pitch_so101_v2": "/api/simulation/assets/wrist_roll_pitch_so101_v2.stl"
+    },
+    "sites": {
+      "baseframe": {
+        "body": "base",
+        "pos": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "quat": [
+          1.0,
+          0.0,
+          0.0,
+          0.0
+        ]
+      },
+      "gripperframe": {
+        "body": "gripper",
+        "pos": [
+          0.012,
+          -0.000218,
+          -0.098127
+        ],
+        "quat": [
+          0.7071067811865475,
+          0.0,
+          0.7071067811865475,
+          0.0
+        ]
+      }
+    },
+    "cameras": {
+      "wrist_cam": {
+        "body": "camera_mount",
+        "pos": [
+          -0.00296,
+          0.05436,
+          -0.0531
+        ],
+        "quat": [
+          0.9582796540567952,
+          -0.2857918968278578,
+          -0.0015559994382773024,
+          0.004546998358513427
+        ],
+        "fovy_deg": 61.0
+      }
+    },
+    "joint_map": {
+      "shoulder_pan": {
+        "mjcf_joint": "shoulder_pan",
+        "kind": "revolute_deg",
+        "scale": 0.017453292519943295,
+        "offset": 0.0
+      },
+      "shoulder_lift": {
+        "mjcf_joint": "shoulder_lift",
+        "kind": "revolute_deg",
+        "scale": 0.017453292519943295,
+        "offset": 0.0
+      },
+      "elbow_flex": {
+        "mjcf_joint": "elbow_flex",
+        "kind": "revolute_deg",
+        "scale": 0.017453292519943295,
+        "offset": 0.0
+      },
+      "wrist_flex": {
+        "mjcf_joint": "wrist_flex",
+        "kind": "revolute_deg",
+        "scale": 0.017453292519943295,
+        "offset": 0.0
+      },
+      "wrist_roll": {
+        "mjcf_joint": "wrist_roll",
+        "kind": "revolute_deg",
+        "scale": 0.017453292519943295,
+        "offset": 0.0
+      },
+      "gripper": {
+        "mjcf_joint": "gripper",
+        "kind": "gripper_linear",
+        "scale": 0.0191986,
+        "offset": -0.17453
+      }
+    },
+    "joint_limits_suite": {
+      "shoulder_pan": [
+        -110.0,
+        110.0
+      ],
+      "shoulder_lift": [
+        -100.0,
+        100.0
+      ],
+      "elbow_flex": [
+        -96.83,
+        96.83
+      ],
+      "wrist_flex": [
+        -95.0,
+        95.0
+      ],
+      "wrist_roll": [
+        -157.21,
+        160.0
+      ],
+      "gripper": [
+        0.0,
+        100.0
+      ]
+    },
+    "conventions": {
+      "frame": "MJCF world = robot base frame; x forward, y left, z up",
+      "quat": "unit quaternion [w, x, y, z]",
+      "body_transform": "world_T_body = world_T_parent * T(pos) * R(quat) * R(joint.axis, mjcf_rad)",
+      "joint_map": "mjcf_rad = scale * suite + offset",
+      "suite_units": "degrees for arm joints; gripper 0 (closed) to 100 (open)",
+      "geom_size": "MJCF half-sizes: box [hx, hy, hz], cylinder/capsule [radius, half_length], sphere [radius]",
+      "mesh": "STL vertices in metres, placed by the geom pos/quat in the body frame (raw MJCF frames, no recentring)",
+      "tool_site": "gripperframe"
+    }
+  },
+  "cases": [
+    {
+      "joints": {
+        "shoulder_pan": 0.0,
+        "shoulder_lift": 0.0,
+        "elbow_flex": 0.0,
+        "wrist_flex": 0.0,
+        "wrist_roll": 0.0,
+        "gripper": 0.0
+      },
+      "frames": [
+        {
+          "name": "base",
+          "position_m": [
+            0.0,
+            0.0,
+            0.0
+          ]
+        },
+        {
+          "name": "shoulder",
+          "position_m": [
+            0.0388353,
+            0.0,
+            0.0624
+          ]
+        },
+        {
+          "name": "upper_arm",
+          "position_m": [
+            0.0692345,
+            -0.0182778,
+            0.1166
+          ]
+        },
+        {
+          "name": "lower_arm",
+          "position_m": [
+            0.0972345,
+            -0.0182778,
+            0.22917
+          ]
+        },
+        {
+          "name": "wrist",
+          "position_m": [
+            0.2321345,
+            -0.0182778,
+            0.23437
+          ]
+        },
+        {
+          "name": "gripper",
+          "position_m": [
+            0.2932345,
+            -0.0001778,
+            0.23437
+          ]
+        },
+        {
+          "name": "camera_mount",
+          "position_m": [
+            0.2932345,
+            -0.0001778,
+            0.23437
+          ]
+        },
+        {
+          "name": "moving_jaw_so101_v1",
+          "position_m": [
+            0.3166345,
+            0.017616991,
+            0.255460884
+          ]
+        },
+        {
+          "name": "gripperframe",
+          "position_m": [
+            0.3913615,
+            -0.000979465,
+            0.246345177
+          ]
+        }
+      ]
+    },
+    {
+      "joints": {
+        "shoulder_pan": 20,
+        "shoulder_lift": -40,
+        "elbow_flex": 55,
+        "wrist_flex": -15,
+        "wrist_roll": 35,
+        "gripper": 80
+      },
+      "frames": [
+        {
+          "name": "base",
+          "position_m": [
+            0.0,
+            0.0,
+            0.0
+          ]
+        },
+        {
+          "name": "shoulder",
+          "position_m": [
+            0.0388353,
+            0.0,
+            0.0624
+          ]
+        },
+        {
+          "name": "upper_arm",
+          "position_m": [
+            0.061149828,
+            -0.027572653,
+            0.1166
+          ]
+        },
+        {
+          "name": "lower_arm",
+          "position_m": [
+            0.013310681,
+            -0.010160627,
+            0.220831676
+          ]
+        },
+        {
+          "name": "wrist",
+          "position_m": [
+            0.137020513,
+            -0.055187323,
+            0.190939801
+          ]
+        },
+        {
+          "name": "gripper",
+          "position_m": [
+            0.200626297,
+            -0.059076318,
+            0.190939801
+          ]
+        },
+        {
+          "name": "camera_mount",
+          "position_m": [
+            0.200626297,
+            -0.059076318,
+            0.190939801
+          ]
+        },
+        {
+          "name": "moving_jaw_so101_v1",
+          "position_m": [
+            0.231738106,
+            -0.042014347,
+            0.198009769
+          ]
+        },
+        {
+          "name": "gripperframe",
+          "position_m": [
+            0.294960141,
+            -0.086800364,
+            0.201209108
+          ]
+        }
+      ]
+    },
+    {
+      "joints": {
+        "shoulder_pan": -25,
+        "shoulder_lift": 15,
+        "elbow_flex": -35,
+        "wrist_flex": 40,
+        "wrist_roll": -65,
+        "gripper": 20
+      },
+      "frames": [
+        {
+          "name": "base",
+          "position_m": [
+            0.0,
+            0.0,
+            0.0
+          ]
+        },
+        {
+          "name": "shoulder",
+          "position_m": [
+            0.0388353,
+            0.0,
+            0.0624
+          ]
+        },
+        {
+          "name": "upper_arm",
+          "position_m": [
+            0.074110864,
+            -0.003718055,
+            0.1166
+          ]
+        },
+        {
+          "name": "lower_arm",
+          "position_m": [
+            0.125028307,
+            0.020025139,
+            0.218087337
+          ]
+        },
+        {
+          "name": "wrist",
+          "position_m": [
+            0.238304119,
+            0.072846517,
+            0.269112256
+          ]
+        },
+        {
+          "name": "gripper",
+          "position_m": [
+            0.282690589,
+            0.113515408,
+            0.248214825
+          ]
+        },
+        {
+          "name": "camera_mount",
+          "position_m": [
+            0.282690589,
+            0.113515408,
+            0.248214825
+          ]
+        },
+        {
+          "name": "moving_jaw_so101_v1",
+          "position_m": [
+            0.315281316,
+            0.115919677,
+            0.263742351
+          ]
+        },
+        {
+          "name": "gripperframe",
+          "position_m": [
+            0.372334012,
+            0.142967823,
+            0.218726393
+          ]
+        }
+      ]
+    }
+  ]
+}

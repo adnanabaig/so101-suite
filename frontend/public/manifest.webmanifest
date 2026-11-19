@@ -1,0 +1,10 @@
+{
+  "name": "SO-101 Robotics Workstation",
+  "short_name": "SO-101",
+  "description": "Operations, simulation, data, evaluation, and embodied control for SO-101 robot arms.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#020617",
+  "theme_color": "#020617",
+  "orientation": "any"
+}

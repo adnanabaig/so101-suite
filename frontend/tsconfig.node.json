@@ -1,0 +1,19 @@
+{
+  "compilerOptions": {
+    "composite": true,
+    "skipLibCheck": true,
+    "module": "ESNext",
+    "moduleResolution": "bundler",
+    "allowSyntheticDefaultImports": true,
+    "strict": true,
+    "types": ["node"]
+  },
+  "include": [
+    "vite.config.ts",
+    "vite.config.test.ts",
+    "playwright.config.ts",
+    "build-stamp.ts",
+    "build-stamp.test.ts",
+    "e2e/**/*.ts"
+  ]
+}

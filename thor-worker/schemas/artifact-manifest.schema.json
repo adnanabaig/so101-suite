@@ -1,0 +1,61 @@
+{
+  "$id": "https://so101.local/schemas/thor-worker/artifact-manifest.schema.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$comment": "artifact_manifest.py additionally enforces NFC, marker names, path uniqueness/sort order and filesystem identity.",
+  "additionalProperties": false,
+  "properties": {
+    "artifact": {
+      "additionalProperties": false,
+      "properties": {
+        "created_utc": {
+          "pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2}Z$",
+          "type": "string"
+        },
+        "kind": {
+          "enum": ["dataset", "checkpoint", "benchmark", "evaluation", "other"]
+        },
+        "name": {
+          "pattern": "^[A-Za-z0-9][A-Za-z0-9._-]{0,127}$",
+          "type": "string"
+        },
+        "source_commit": {
+          "pattern": "^(?!0{40}$)[0-9a-f]{40}$",
+          "type": "string"
+        }
+      },
+      "required": ["kind", "name", "source_commit", "created_utc"],
+      "type": "object"
+    },
+    "files": {
+      "items": {
+        "additionalProperties": false,
+        "properties": {
+          "path": {
+            "minLength": 1,
+            "pattern": "^(?!/)(?!.*//)(?!.*\\/$)(?!.*\\\\)(?!.*(?:^|/)\\.{1,2}(?:/|$))[^\\u0000-\\u001F\\u007F]+$",
+            "type": "string"
+          },
+          "sha256": {
+            "pattern": "^[0-9a-f]{64}$",
+            "type": "string"
+          },
+          "size": {
+            "minimum": 0,
+            "type": "integer"
+          }
+        },
+        "required": ["path", "size", "sha256"],
+        "type": "object"
+      },
+      "minItems": 1,
+      "type": "array",
+      "uniqueItems": true
+    },
+    "schema_version": {
+      "const": 1
+    }
+  },
+  "required": ["schema_version", "artifact", "files"],
+  "title": "SO-101 Thor immutable artifact manifest",
+  "type": "object"
+}

@@ -1,0 +1,11 @@
+# SO-101 leader (teleop) arm. Back-driven by hand; torque stays off.
+type: so101_leader
+port: ${SO101_LEADER_PORT}
+baudrate: 1000000
+motors:
+  shoulder_pan:   [1, sts3215]
+  shoulder_lift:  [2, sts3215]
+  elbow_flex:     [3, sts3215]
+  wrist_flex:     [4, sts3215]
+  wrist_roll:     [5, sts3215]
+  gripper:        [6, sts3215]

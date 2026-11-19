@@ -1,0 +1,22 @@
+# SO-101 follower (actuated) arm. Reference config — runtime values come from
+# SO101_* env vars / .env; this documents the canonical hardware layout.
+type: so101_follower
+port: ${SO101_FOLLOWER_PORT}
+baudrate: 1000000
+motors:
+  # name: [feetech_id, model]
+  shoulder_pan:   [1, sts3215]
+  shoulder_lift:  [2, sts3215]
+  elbow_flex:     [3, sts3215]
+  wrist_flex:     [4, sts3215]
+  wrist_roll:     [5, sts3215]
+  gripper:        [6, sts3215]
+# Position limits (deg) — also enforced in code by SafetyGuard.
+limits:
+  shoulder_pan:  [-110, 110]
+  shoulder_lift: [-100, 100]
+  elbow_flex:    [-100, 100]
+  wrist_flex:    [-100, 100]
+  wrist_roll:    [-160, 160]
+  gripper:       [0, 100]
+max_step_deg: 15

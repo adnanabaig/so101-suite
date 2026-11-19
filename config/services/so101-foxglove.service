@@ -1,0 +1,14 @@
+[Unit]
+Description=SO101 local Foxglove camera and saved calibration viewer
+After=so101-arm-camera.service so101-camera-1.service so101-camera-2.service
+Wants=so101-arm-camera.service so101-camera-1.service so101-camera-2.service
+
+[Service]
+Type=simple
+WorkingDirectory=/home/adnan/so101-suite
+ExecStart=/usr/bin/env -u PYTHONPATH -u LEROBOT_HOME /home/adnan/so101-suite/.artifacts/foxglove-venv/bin/python -I /home/adnan/so101-suite/scripts/foxglove_viewer.py
+Restart=on-failure
+RestartSec=3
+
+[Install]
+WantedBy=default.target

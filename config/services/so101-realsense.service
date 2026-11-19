@@ -1,0 +1,9 @@
+[Unit]
+Description=SO101 D435i color preview relay
+PartOf=so101-suite.target
+
+[Service]
+WorkingDirectory=/home/adnan/so101-suite
+ExecStart=/usr/bin/env -u PYTHONPATH /home/adnan/so101-suite/.venv/bin/python -I /home/adnan/so101-suite/scripts/arm_camera.py --device realsense:347622075852 --port 8770 --width 640 --height 480 --fps 30 --preview-fps 30
+Restart=on-failure
+RestartSec=3

@@ -1,0 +1,16 @@
+#!/usr/bin/env bash
+set -euo pipefail
+case "${1:-start}" in
+  start) systemctl --user start so101-arm-camera.service ;;
+  stop) systemctl --user stop so101-arm-camera.service ;;
+  restart) systemctl --user restart so101-arm-camera.service ;;
+  status) systemctl --user status so101-arm-camera.service --no-pager ;;
+  snapshot)
+    suite_root="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd)"
+    mkdir -p "$suite_root/.artifacts/camera"
+    curl --fail --silent --show-error --max-time 5 http://127.0.0.1:8765/snapshot.jpg \
+      -o "$suite_root/.artifacts/camera/latest.jpg"
+    echo "$suite_root/.artifacts/camera/latest.jpg"
+    ;;
+  *) echo 'Usage: arm-camera [start|stop|restart|status|snapshot]' >&2; exit 2 ;;
+esac

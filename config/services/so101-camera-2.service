@@ -1,0 +1,8 @@
+[Unit]
+Description=SO101 icSpring camera 2 preview
+
+[Service]
+WorkingDirectory=/home/adnan/so101-suite
+ExecStart=/usr/bin/env -u PYTHONPATH /home/adnan/so101-suite/.venv/bin/python -I /home/adnan/so101-suite/scripts/arm_camera.py --device /dev/v4l/by-id/usb-icSpring_icspring_camera_202404160005-video-index0 --port 8769 --width 640 --height 480 --fps 30 --preview-fps 30
+Restart=on-failure
+RestartSec=3

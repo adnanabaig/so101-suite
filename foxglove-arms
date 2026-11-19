@@ -1,0 +1,9 @@
+#!/usr/bin/env bash
+set -euo pipefail
+suite_root="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd)"
+if [[ ! -f "$suite_root/.artifacts/foxglove-models/index.json" ]]; then
+    "$suite_root/.artifacts/foxglove-venv/bin/python" -I \
+        "$suite_root/scripts/prepare_foxglove_models.py"
+fi
+systemctl --user start so101-foxglove.service
+exec /usr/bin/foxglove-studio 'foxglove://open?ds=foxglove-websocket&ds.url=ws://127.0.0.1:8766/' "$@"

@@ -1,0 +1,11 @@
+[Unit]
+Description=SO101 real motor API (operator controls arming)
+PartOf=so101-suite.target
+
+[Service]
+Type=simple
+WorkingDirectory=/home/adnan/so101-suite
+ExecStart=/usr/bin/env -u PYTHONPATH -u LEROBOT_HOME /home/adnan/so101-suite/.venv/bin/python -I /home/adnan/so101-suite/scripts/motor_service.py
+Restart=no
+TimeoutStopSec=20
+

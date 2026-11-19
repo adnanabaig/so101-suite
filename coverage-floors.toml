@@ -1,0 +1,141 @@
+# Coverage floors, enforced by scripts/check_coverage.py (`make coverage`, the
+# CI backend job and `make ci`).
+#
+# Metric: coverage.py `percent_covered` with branch coverage on, which is the
+# "Cover" column of `coverage report`. Keys are repo-relative paths; function
+# keys are "<path>::<qualified name>" as coverage.py names them.
+#
+# Each floor is the value measured at 7b59eda (5 identical runs) minus about
+# 2 points, rounded down, so it tolerates small refactors without letting a
+# change strip the tests from these paths. When coverage improves, raise the
+# floor in the same change. Never lower one to land a change; add tests.
+# A target missing from the report fails the check, so renames must move
+# their floors along.
+
+[settings]
+branch = true
+
+[files]
+"src/so101/hardware/safety.py" = 85.0               # measured 87.56 (v0.2.1)
+"src/so101/services/robot_manager.py" = 88.0        # measured 91.02 (v0.2.1)
+"src/so101/services/routers/control.py" = 97.0      # measured 100.00 (v0.2.1)
+# The standalone gate (latches and bus.lock for CLI commands), 1 run.
+"src/so101/bringup/standalone.py" = 95.0            # measured 97.66
+# Device-global physical ownership and append-only energized recovery. Initial
+# fail-closed floor pending the first supported G15 coverage report.
+"src/so101/bringup/ownership.py" = 70.0
+# Cameras (RealSense stream), measured on the merged tree, 3 identical runs.
+"src/so101/hardware/camera_spec.py" = 98.0          # measured 100.00
+"src/so101/hardware/cameras.py" = 97.0              # measured 99.12
+"src/so101/hardware/realsense.py" = 98.0            # measured 100.00
+"src/so101/hardware/camera_discovery.py" = 95.0     # measured 97.56
+# Placeholder for the simulation stream's units/limits module (deg<->rad,
+# joint limits). Enable with its real path once it lands with tests:
+# "src/so101/simulation/units.py" = 90.0
+
+[functions]
+# Device identity, cross-process ownership, immutable intent journal and raw
+# hardware capability gates. Initial fail-closed floors, not measurements;
+# raise from the first supported G15 report and add tests for any shortfall.
+"src/so101/bringup/ownership.py::canonical_device_identity" = 75.0
+"src/so101/bringup/ownership.py::_revalidate_identity_endpoint" = 75.0
+"src/so101/bringup/ownership.py::locked_device_port" = 70.0
+"src/so101/bringup/ownership.py::require_device_lock" = 75.0
+"src/so101/bringup/ownership.py::BusLock.acquire" = 75.0
+"src/so101/bringup/ownership.py::DeviceBusLock.acquire" = 75.0
+"src/so101/bringup/ownership.py::_atomic_create_marker" = 75.0
+"src/so101/bringup/ownership.py::_journal_state" = 75.0
+"src/so101/bringup/ownership.py::write_global_energized_intent" = 75.0
+"src/so101/bringup/ownership.py::clear_global_energized_intent" = 75.0
+"src/so101/bringup/ownership.py::read_global_energized_intent" = 75.0
+"src/so101/bringup/ownership.py::require_enable_intent" = 75.0
+"src/so101/bringup/ownership.py::enable_intent_is_adopted" = 75.0
+# Lease paths: acquire, renew, release and expire the control lease, and the
+# lease-gated operations that move or read the arm.
+"src/so101/services/robot_manager.py::RobotManager.acquire_lease" = 86.0               # 88.9
+"src/so101/services/robot_manager.py::RobotManager.heartbeat_lease" = 84.0             # 86.7 (v0.2.1)
+"src/so101/services/robot_manager.py::RobotManager.release_lease" = 97.0               # 100.0 (v0.2.1)
+"src/so101/services/robot_manager.py::RobotManager._expire_lease_if_needed" = 91.0     # 94.4 (v0.2.1)
+"src/so101/services/robot_manager.py::RobotManager._require_lease_locked" = 98.0       # 100.0
+"src/so101/services/robot_manager.py::RobotManager.observe_with_lease" = 85.0          # 87.8 (v0.2.1)
+# Raised with the arm/stop race fix (re-validation before any bus write), see below.
+"src/so101/services/robot_manager.py::RobotManager.arm_control" = 87.0                 # 90.3
+# disarm_control (83.0, measured 85.7) was the deprecated v0.1 shim; stops wave 2
+# removed it and its floor moved to the dispatcher it wrapped.
+"src/so101/services/robot_manager.py::RobotManager.request_stop" = 97.0               # 100.0 (v0.2.1)
+"src/so101/services/robot_manager.py::RobotManager.send_external_command" = 93.0       # 95.8 (v0.2.1)
+"src/so101/services/robot_manager.py::RobotManager.validate_command_freshness" = 69.0  # 71.4
+# Safety paths (the control-plane review fixes on wt/fix-control). These
+# floors are the value measured with all of those fixes and their tests in
+# place, minus 3 points, rounded down. That is one point more slack than
+# above (and fewer measuring runs), because several of these run on their own
+# threads (so101-collapse, the watchdog) and a test's timing decides which
+# branch a race takes. A floor at 97.0 marks a path measured at 100: every
+# branch of it has a test, so a drop means a test went missing.
+# Critical category-0/dispatcher paths. These are initial fail-closed floors,
+# not claimed measurements: this development host cannot run coverage. The
+# first supported G15 coverage report must meet them; add tests if it does not,
+# then ratchet each floor from that measured value (never lower it).
+"src/so101/services/robot_manager.py::RobotManager._fail_closed_runtime_io" = 80.0
+"src/so101/services/robot_manager.py::RobotManager._latch_fault_in_memory" = 80.0
+"src/so101/services/robot_manager.py::RobotManager.latch_estop" = 85.0
+"src/so101/services/robot_manager.py::RobotManager._estop_category0" = 85.0
+"src/so101/services/robot_manager.py::RobotManager._dispatch_stop" = 90.0
+"src/so101/services/robot_manager.py::RobotManager._external_stop_in_progress_locked" = 80.0
+"src/so101/services/robot_manager.py::RobotManager._any_stop_in_progress_locked" = 80.0
+"src/so101/services/robot_manager.py::RobotManager._stop_transition_is_current_locked" = 80.0
+"src/so101/services/robot_manager.py::RobotManager._arm_cleanup_requires_torque_cut_locked" = 80.0
+"src/so101/services/robot_manager.py::RobotManager._revoke_authority_locked" = 80.0
+"src/so101/services/robot_manager.py::RobotManager._cut_torque" = 90.0
+"src/so101/services/robot_manager.py::RobotManager._cut_torque_pass" = 80.0
+"src/so101/services/robot_manager.py::RobotManager.reset_estop" = 80.0
+"src/so101/services/robot_manager.py::RobotManager.clear_fault" = 80.0
+"src/so101/services/robot_manager.py::RobotManager._retry_torque_off" = 80.0
+"src/so101/services/robot_manager.py::RobotManager._supervise_stops" = 80.0
+# Collapse: the capped descent (a late tick never catches up), its fallbacks
+# and the request that plans it.
+"src/so101/services/robot_manager.py::RobotManager._run_descent" = 91.0                # 94.06
+"src/so101/services/robot_manager.py::RobotManager._collapse_fallback" = 97.0          # 100.0
+"src/so101/services/robot_manager.py::RobotManager._collapse_done" = 77.0              # 80.0
+"src/so101/services/robot_manager.py::RobotManager._collapse_stop" = 86.0              # 89.69
+"src/so101/services/robot_manager.py::RobotManager._plan_collapse" = 80.0
+"src/so101/services/robot_manager.py::RobotManager._freeze_collapse" = 80.0
+"src/so101/services/robot_manager.py::RobotManager._claim_collapse_end" = 80.0
+"src/so101/services/robot_manager.py::RobotManager._police_collapse" = 80.0
+"src/so101/services/robot_manager.py::RobotManager._await_collapse" = 80.0
+# Halt: the dispatch, the hold (Goal := Present) and its category 0 fallback.
+"src/so101/services/robot_manager.py::RobotManager._halt_stop" = 93.0                  # 96.88
+"src/so101/services/robot_manager.py::RobotManager._hold_in_place" = 88.0              # 91.18
+"src/so101/services/robot_manager.py::RobotManager._halt_fallback" = 97.0              # 100.0
+"src/so101/services/robot_manager.py::RobotManager._sample_hold" = 80.0
+# Arming re-checks its authority before any bus write.
+"src/so101/services/robot_manager.py::RobotManager._arm_authority_lost_locked" = 97.0  # 100.0
+# Latch persistence and its fallback marker (safety-B8).
+"src/so101/services/robot_manager.py::RobotManager._persist_latches" = 93.0            # 96.15
+"src/so101/services/robot_manager.py::RobotManager._latches_saved" = 97.0              # 100.0
+"src/so101/services/robot_manager.py::RobotManager._latches_unsaved" = 93.0            # 96.88
+"src/so101/services/robot_manager.py::RobotManager._restore_latches" = 91.0            # 94.52
+"src/so101/services/robot_manager.py::_read_latch_marker" = 97.0                       # 100.0
+"src/so101/services/robot_manager.py::RobotManager._add_recovery_devices_locked" = 80.0
+"src/so101/services/robot_manager.py::RobotManager._prepare_global_energized_intent" = 80.0
+"src/so101/services/robot_manager.py::RobotManager._write_global_recovery_intent" = 80.0
+"src/so101/services/robot_manager.py::RobotManager._clear_global_energized_recovery" = 80.0
+"src/so101/services/robot_manager.py::RobotManager.publish_restored_recovery_intent" = 80.0
+"src/so101/services/robot_manager.py::RobotManager._retire_confirmed_recovery_devices" = 80.0
+# Three-state torque recovery, including physical-power acknowledgement.
+"src/so101/services/robot_manager.py::RobotManager._mark_torque_unconfirmed" = 80.0
+"src/so101/services/robot_manager.py::RobotManager._reopen_stale" = 80.0
+"src/so101/services/robot_manager.py::RobotManager._retry_cut" = 80.0
+"src/so101/services/robot_manager.py::RobotManager._release_ports" = 80.0
+"src/so101/services/robot_manager.py::RobotManager.shutdown" = 80.0
+"src/so101/services/robot_manager.py::RobotManager._stop_loop" = 80.0
+# Bus diagnostics lent to preflight, and the preflight routes (POST only).
+"src/so101/services/robot_manager.py::RobotManager.run_idle_bus_diagnostic" = 93.0     # 96.97
+"src/so101/services/routers/preflight.py::run_preflight" = 97.0                        # 100.0
+"src/so101/services/routers/preflight.py::bus_facts" = 97.0                            # 100.0
+# Servo health critical: the poll's handler and the fault-latching Collapse.
+"src/so101/services/robot_manager.py::RobotManager._on_health_critical" = 97.0         # 100.0
+"src/so101/services/robot_manager.py::RobotManager.servo_health_critical" = 97.0       # 100.0
+# The halt route and its bounded body read.
+"src/so101/services/routers/robot.py::halt" = 97.0                                     # 100.0
+"src/so101/services/guard.py::read_stop_body" = 97.0                                   # 100.0

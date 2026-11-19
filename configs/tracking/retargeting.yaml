@@ -1,0 +1,23 @@
+version: 1
+frame: normalized_operator_workspace
+confidence_threshold: 0.72
+watchdog_ms: 300
+require_deadman: true
+reengage_after_tracking_loss: true
+smoothing:
+  type: exponential
+  alpha: 0.28
+workspace:
+  x: [-1.0, 1.0]
+  y: [-1.0, 1.0]
+  z: [-1.0, 1.0]
+mapping:
+  x: shoulder_pan
+  y: shoulder_lift
+  z: elbow_flex
+  wrist_roll: wrist_roll
+  pinch: gripper
+notes:
+  - Preview is available without a lease; execution is not.
+  - Monocular depth is normalized until metric calibration is provided.
+  - SO-101 is 5-DoF; production IK must use a soft orientation objective.

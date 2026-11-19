@@ -1,0 +1,12 @@
+# Camera layout. Runtime ids come from SO101_CAMERAS; this documents intent.
+cameras:
+  - name: top        # overhead/scene view
+    id: "0"
+    width: 640
+    height: 480
+    fps: 30
+  - name: wrist      # gripper close-up (recommended for manipulation)
+    id: "1"
+    width: 640
+    height: 480
+    fps: 30

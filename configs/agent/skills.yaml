@@ -1,0 +1,29 @@
+version: 1
+planner: bounded-v0
+approval_required: true
+skills:
+  inspect_scene:
+    mutates_robot: false
+    description: Read current state, safety status, cameras and recent events.
+  home:
+    mutates_robot: true
+    timeout_s: 8
+    description: Move through a rate-limited command to the configured neutral pose.
+  open_gripper:
+    mutates_robot: true
+    timeout_s: 3
+    description: Open the gripper while holding the other measured joints.
+  close_gripper:
+    mutates_robot: true
+    timeout_s: 3
+    description: Close the gripper while holding the other measured joints.
+  wrist_wave:
+    mutates_robot: true
+    timeout_s: 10
+    description: Move to a small bounded wrist-roll demonstration target.
+policy:
+  max_steps_per_proposal: 8
+  max_proposal_age_s: 120
+  cancel_on_lease_loss: true
+  cancel_on_estop: true
+  cancel_on_watchdog: true

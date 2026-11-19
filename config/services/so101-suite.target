@@ -1,0 +1,4 @@
+[Unit]
+Description=SO101 motor server, cameras, Foxglove and local recording
+Wants=so101-motor.service so101-foxglove.service so101-recording.service so101-realsense.service
+After=so101-motor.service so101-foxglove.service so101-recording.service
